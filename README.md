@@ -5,7 +5,7 @@ Mint 22.3, Cinnamon 6.6.9, X11). Original code and artwork; no Apple assets.
 
 Two variants: **NalaMint** (light) and **NalaMint-Dark**.
 
-![NalaMint Dark](src/spices/screenshots/theme-dark.png)
+![NalaMint Dark desktop](docs/desktop.png)
 ![Launchpad](src/spices/screenshots/launchpad.png)
 
 ## Install

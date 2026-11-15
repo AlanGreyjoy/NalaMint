@@ -12,6 +12,7 @@ color, x, y, w, h = sys.argv[1], *map(int, sys.argv[2:6])
 win = Gtk.Window(title="NalaMint Backdrop")
 win.set_decorated(False)
 win.set_type_hint(Gdk.WindowTypeHint.UTILITY)  # not rounded by the extension
+win.set_skip_taskbar_hint(True)                 # keep it out of the dock
 win.move(x, y)
 win.set_default_size(w, h)
 css = Gtk.CssProvider()
