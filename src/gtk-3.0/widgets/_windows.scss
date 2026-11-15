@@ -1,0 +1,174 @@
+// Title bars, header bars, window decorations and the traffic-light buttons.
+//
+// Muffin (Cinnamon 6.6) draws server-side frames from this CSS using the node
+// path  window.background.ssd > decoration > headerbar.titlebar.default-decoration
+//       > label.title / button.titlebutton.{close,minimize,maximize} > image
+// It reads the headerbar border-radius for the corner radius, decoration
+// padding+border for the frame borders, and button min-size/margin for buttons.
+
+// ----- header bars (apps with client-side titlebars) -----
+headerbar {
+  min-height: 26px;
+  padding: 6px 8px;
+  border: none;
+  border-bottom: 1px solid $border;
+  border-radius: 0;
+  background-color: $headerbar;
+  background-image: none;
+  box-shadow: none;
+  color: $fg;
+
+  .title { font-weight: bold; padding: 0 12px; }
+  .subtitle { font-size: smaller; color: $fg_dim; padding: 0 12px; }
+  &:backdrop .title, &:backdrop .subtitle { color: $wm_title_unfocused; }
+
+  // Toolbar-style buttons: flat until hovered
+  button:not(.titlebutton):not(.suggested-action):not(.destructive-action):not(.combo) {
+    @extend %flat-button;
+    &.text-button { padding: 2px 10px; }
+  }
+  .linked > button:not(.titlebutton):not(.suggested-action):not(.destructive-action) {
+    border-radius: $radius_button;
+    border-style: none;
+  }
+  entry { min-height: 24px; }
+  separator.titlebutton { background: none; min-width: 6px; }
+  > box > separator, separator:not(.sidebar) { background: none; }
+
+  &.selection-mode {
+    color: $accent_fg;
+    background-color: $accent;
+    .title, .subtitle { color: $accent_fg; }
+    button { color: $accent_fg; }
+  }
+}
+
+// Apps that pack a custom container as the titlebar
+.titlebar:not(headerbar) {
+  background-color: $headerbar;
+  border-bottom: 1px solid $border;
+  > separator { background-color: $border; }
+  > headerbar { border-bottom: none; }
+}
+
+// Round the top of client-side titlebars to match the window
+window.csd > .titlebar:not(headerbar),
+window.csd > headerbar.titlebar,
+window.csd > .titlebar > headerbar:first-child {
+  border-top-left-radius: $radius_window;
+  border-top-right-radius: $radius_window;
+}
+window.csd > .titlebar > headerbar:first-child { border-top-right-radius: 0; }
+window.csd > .titlebar > headerbar:last-child { border-top-left-radius: 0; border-top-right-radius: $radius_window; }
+
+.maximized, .fullscreen, .tiled, .tiled-top, .tiled-left, .tiled-right, .tiled-bottom {
+  headerbar.titlebar, > .titlebar, > .titlebar > headerbar { border-radius: 0; }
+}
+
+// ----- server-side frames (Muffin) and GTK's default titlebar -----
+headerbar.default-decoration, .titlebar.default-decoration {
+  min-height: 28px;
+  padding: 0 9px;
+  border: none;
+  border-radius: $radius_window $radius_window 0 0;
+  box-shadow: none;
+  background-color: $headerbar;
+  .title { font-weight: bold; color: $wm_title; }
+  &:backdrop .title { color: $wm_title_unfocused; }
+}
+.maximized headerbar.default-decoration, .tiled headerbar.default-decoration,
+.maximized .titlebar.default-decoration, .tiled .titlebar.default-decoration {
+  border-radius: 0;
+}
+
+// ----- traffic lights -----
+button.titlebutton {
+  min-width: 16px;
+  min-height: 16px;
+  padding: 0;
+  margin: 0 1px;
+  border: none;
+  border-radius: 9999px;
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 14px 14px;
+  box-shadow: none;
+  color: transparent;           // hides the icon theme's glyph
+  -gtk-icon-shadow: none;
+  outline-offset: -1px;
+  image { color: transparent; opacity: 0; }
+
+  @each $kind in close, minimize, maximize {
+    &.#{$kind} {
+      background-image: url("assets/titlebutton-#{$kind}.svg");
+      &:hover { background-image: url("assets/titlebutton-#{$kind}-hover.svg"); }
+      &:active { background-image: url("assets/titlebutton-#{$kind}-active.svg"); }
+      &:backdrop { background-image: url("assets/titlebutton-backdrop-#{$variant}.svg"); }
+      &:backdrop:hover { background-image: url("assets/titlebutton-#{$kind}-hover.svg"); }
+      &:backdrop:active { background-image: url("assets/titlebutton-#{$kind}-active.svg"); }
+    }
+  }
+  &:hover, &:active, &:backdrop { background-color: transparent; box-shadow: none; }
+}
+headerbar button.titlebutton:not(.close):not(.minimize):not(.maximize) {
+  // app-menu / custom title buttons keep a normal flat look
+  color: $fg;
+  image { color: inherit; opacity: 1; }
+  min-width: 24px;
+  border-radius: $radius_button;
+  &:hover { background-color: $hover; }
+}
+headerbar .titlebutton.close, headerbar .titlebutton.minimize, headerbar .titlebutton.maximize {
+  margin: 0 2px;
+}
+
+// ----- window decoration: shadow and rounded corners -----
+decoration {
+  border-radius: $radius_window;
+  border-width: 0;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, if($is_dark, 0.55, 0.28)),
+              0 0 0 1px if($is_dark, rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.18));
+  margin: 12px;
+  &:backdrop {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, if($is_dark, 0.45, 0.16)),
+                0 0 0 1px if($is_dark, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.14));
+    transition: box-shadow 200ms ease-out;
+  }
+  .maximized &, .fullscreen & { border-radius: 0; box-shadow: none; }
+  .tiled &, .tiled-top &, .tiled-left &, .tiled-right &, .tiled-bottom & {
+    border-radius: 0;
+    box-shadow: 0 0 0 1px $border, 0 0 0 20px transparent;
+  }
+  .popup & { box-shadow: none; }
+  .csd.popup & {
+    border-radius: $radius_menu;
+    box-shadow: $menu_shadow;
+  }
+  tooltip.csd & { border-radius: 6px; box-shadow: none; }
+  messagedialog.csd & { border-radius: $radius_window; }
+
+  // Muffin frames: no GTK shadow (Muffin draws its own), no side borders
+  .ssd & {
+    padding: 0;
+    border: none;
+    border-radius: $radius_window $radius_window 0 0;
+    box-shadow: none;
+    background-color: $headerbar;
+  }
+  .solid-csd & {
+    margin: 0;
+    padding: 2px;
+    border-radius: 0;
+    background-color: $wm_border;
+    box-shadow: none;
+  }
+}
+
+// Rounded bottom for client-side windows' own background
+window.csd.background:not(.maximized):not(.fullscreen):not(.tiled):not(.tiled-top):not(.tiled-left):not(.tiled-right):not(.tiled-bottom) {
+  border-radius: 0 0 $radius_window $radius_window;
+}
+window.csd.popup { border-radius: $radius_menu; }
+
+window.solid-csd { border-radius: 0; }

@@ -1,0 +1,7 @@
+{
+  "uuid": "nalamint-corners@nalamint",
+  "name": "NalaMint Rounded Corners",
+  "description": "Rounds all four corners of every normal window, including apps that draw their own frames.",
+  "cinnamon-version": ["6.0", "6.2", "6.4", "6.6"],
+  "version": "1.0"
+}

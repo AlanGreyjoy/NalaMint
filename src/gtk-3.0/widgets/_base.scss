@@ -1,0 +1,131 @@
+// Named colors that apps and other themes' code look up.
+@define-color theme_bg_color #{$bg};
+@define-color theme_fg_color #{$fg};
+@define-color theme_base_color #{$base};
+@define-color theme_text_color #{$fg};
+@define-color theme_selected_bg_color #{$accent};
+@define-color theme_selected_fg_color #{$accent_fg};
+@define-color theme_unfocused_bg_color #{$bg};
+@define-color theme_unfocused_fg_color #{$fg};
+@define-color theme_unfocused_base_color #{$base};
+@define-color theme_unfocused_text_color #{$fg};
+@define-color theme_unfocused_selected_bg_color #{$selected_backdrop};
+@define-color theme_unfocused_selected_fg_color #{$fg};
+@define-color insensitive_bg_color #{$bg};
+@define-color insensitive_fg_color #{$disabled_fg};
+@define-color insensitive_base_color #{$base};
+@define-color borders #{$border};
+@define-color unfocused_borders #{$border};
+@define-color warning_color #{$orange};
+@define-color error_color #{$red};
+@define-color success_color #{$green};
+@define-color accent_color #{$accent};
+@define-color accent_bg_color #{$accent};
+@define-color accent_fg_color #{$accent_fg};
+@define-color content_view_bg #{$base};
+@define-color placeholder_text_color #{$fg_faint};
+@define-color wm_title #{$wm_title};
+@define-color wm_unfocused_title #{$wm_title_unfocused};
+@define-color wm_bg #{$headerbar};
+@define-color wm_border #{$wm_border};
+
+* {
+  padding: 0;
+  outline-color: $focus_glow;
+  outline-style: solid;
+  outline-offset: -3px;
+  outline-width: 2px;
+  -gtk-outline-radius: 5px;
+  -gtk-secondary-caret-color: $accent;
+  -GtkScrolledWindow-scrollbar-spacing: 0;
+  -GtkToolItemGroup-expander-size: 11;
+  -GtkTextView-error-underline-color: $red;
+  -GtkWidget-text-handle-width: 20;
+  -GtkWidget-text-handle-height: 24;
+  -GtkDialog-button-spacing: 8;
+  -GtkDialog-action-area-border: 0;
+}
+
+.background {
+  color: $fg;
+  background-color: $bg;
+}
+
+*:disabled { -gtk-icon-effect: dim; }
+
+.gtkstyle-fallback {
+  color: $fg;
+  background-color: $bg;
+  &:hover { background-color: $button_hover; }
+  &:active { background-color: $button_active; }
+  &:disabled { color: $disabled_fg; }
+  &:selected { color: $accent_fg; background-color: $accent; }
+}
+
+label {
+  caret-color: currentColor;
+  &.separator { color: $fg_dim; }
+  &:disabled { color: $disabled_fg; }
+  selection { color: $accent_fg; background-color: $accent; }
+  &:backdrop selection { color: $fg; background-color: $selected_backdrop; }
+}
+
+.dim-label, label.dim-label { opacity: 0.55; }
+
+// Accent-colored text and links
+*:link, button:link, button:visited { color: $link; }
+*:link:hover { color: lighten($link, 8%); }
+*:visited { color: if($is_dark, lighten($link, 6%), darken($link, 10%)); }
+*:link:disabled { color: rgba($link, 0.5); }
+button:link, button:visited {
+  > label { text-decoration-line: underline; }
+}
+
+.osd .scale-popup, .osd {
+  color: #ffffff;
+  background-color: $osd_bg;
+  border-radius: 10px;
+  border: none;
+}
+
+assistant {
+  .sidebar { background-color: $sidebar; border-right: 1px solid $border; padding: 6px 0; }
+  .sidebar label { padding: 6px 14px; border-radius: $radius_item; margin: 0 6px; }
+  .sidebar label.highlight { background-color: $sidebar_selected; font-weight: bold; }
+}
+
+spinner {
+  background: none;
+  opacity: 0;
+  -gtk-icon-source: -gtk-icontheme('process-working-symbolic');
+  &:checked {
+    opacity: 1;
+    animation: spin 1s linear infinite;
+    &:disabled { opacity: 0.5; }
+  }
+}
+@keyframes spin { to { -gtk-icon-transform: rotate(1turn); } }
+
+// Drag and drop / rubberband
+.rubberband, rubberband,
+flowbox rubberband, treeview.view rubberband, .content-view rubberband {
+  border: 1px solid $accent;
+  background-color: rgba($accent, 0.18);
+}
+
+*:drop(active):focus, *:drop(active) {
+  box-shadow: inset 0 0 0 2px $accent;
+}
+
+.keycap {
+  min-width: 18px;
+  min-height: 22px;
+  padding: 2px 6px;
+  border-radius: 5px;
+  border: 1px solid $border;
+  box-shadow: inset 0 -2px $border;
+  background-color: $base;
+  color: $fg;
+}
+
+image.large-icons, .large-icons { -gtk-icon-style: regular; }

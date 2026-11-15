@@ -1,0 +1,89 @@
+/* NalaMint Launchpad. Cinnamon loads this into the active desktop theme, so
+   Launchpad looks the same under any theme. Full-screen app grid over the
+   blurred wallpaper; the shade keeps white labels readable on bright ones. */
+.nalamint-launchpad-shade { background-color: rgba(0, 0, 0, 0.3); }
+
+.nalamint-launchpad-search {
+  width: 17em;
+  min-height: 22px;
+  padding: 5px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.14);
+  caret-color: white;
+  caret-size: 1px;
+  selected-color: white;
+  selection-background-color: rgba(10, 132, 255, 0.8);
+}
+.nalamint-launchpad-search StLabel.hint-text { color: rgba(255, 255, 255, 0.6); }
+.nalamint-launchpad-search-icon { icon-size: 16px; padding-right: 6px; color: rgba(255, 255, 255, 0.7); }
+
+.nalamint-launchpad-item {
+  border-radius: 20px;
+  transition-duration: 80ms;
+}
+.nalamint-launchpad-item:selected { background-color: rgba(255, 255, 255, 0.16); }
+.nalamint-launchpad-item:active { background-color: rgba(0, 0, 0, 0.12); }
+.nalamint-launchpad-item StIcon { icon-shadow: 0 3px 8px rgba(0, 0, 0, 0.3); }
+.nalamint-launchpad-label {
+  padding-top: 10px;
+  color: white;
+  font-size: 1.05em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+}
+
+.nalamint-launchpad-dots { spacing: 10px; }
+.nalamint-launchpad-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: rgba(255, 255, 255, 0.35);
+  transition-duration: 150ms;
+}
+.nalamint-launchpad-dot:hover { background-color: rgba(255, 255, 255, 0.6); }
+.nalamint-launchpad-dot:checked { background-color: rgba(255, 255, 255, 0.95); }
+
+.nalamint-launchpad-empty {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1.6em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Folders: a translucent tile of small icons; opened, a frosted panel */
+.nalamint-launchpad-folder-icon {
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/* Dragging an app onto this icon makes a folder / adds to it */
+.nalamint-launchpad-item:drop { background-color: rgba(255, 255, 255, 0.24); }
+
+.nalamint-launchpad-folder-backdrop { background-color: rgba(0, 0, 0, 0.25); }
+.nalamint-launchpad-folder {
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+.nalamint-launchpad-folder-title {
+  padding: 4px 12px;
+  color: white;
+  font-size: 1.6em;
+  font-weight: bold;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+}
+.nalamint-launchpad-folder-title-entry {
+  width: 14em;
+  padding: 4px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.14);
+  font-size: 1.6em;
+  font-weight: bold;
+  caret-color: white;
+  caret-size: 1px;
+  selected-color: white;
+  selection-background-color: rgba(10, 132, 255, 0.8);
+}

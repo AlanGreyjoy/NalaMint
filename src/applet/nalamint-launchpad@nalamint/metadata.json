@@ -1,0 +1,7 @@
+{
+  "uuid": "nalamint-launchpad@nalamint",
+  "name": "NalaMint Launchpad",
+  "description": "Opens a full-screen grid of your apps over the blurred wallpaper, centered on screen, with search and pages. Put it in the dock; Super opens it too.",
+  "max-instances": 1,
+  "version": "1.0"
+}

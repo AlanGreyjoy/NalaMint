@@ -1,0 +1,155 @@
+// Sliders, progress bars, level bars, scrollbars.
+
+scale {
+  min-height: 10px;
+  min-width: 10px;
+  padding: 10px;
+
+  trough {
+    min-height: 4px;
+    min-width: 4px;
+    border: none;
+    border-radius: 9999px;
+    background-color: $trough;
+    outline-offset: 2px;
+  }
+  highlight {
+    border: none;
+    border-radius: 9999px;
+    background-color: $accent;
+  }
+  fill { border-radius: 9999px; background-color: rgba($accent, 0.3); }
+
+  slider {
+    min-width: 18px;
+    min-height: 18px;
+    margin: -7px;
+    border: none;
+    border-radius: 9999px;
+    background-color: $knob;
+    box-shadow: $knob_shadow;
+    transition: background-color 120ms;
+    &:hover { background-color: lighten($knob, 2%); }
+    &:active { background-color: darken($knob, 6%); }
+  }
+
+  &:disabled {
+    highlight { background-color: rgba($accent, 0.4); }
+    slider { background-color: rgba($knob, 0.7); box-shadow: 0 0 0 1px $border; }
+  }
+
+  &.fine-tune slider { min-width: 14px; min-height: 14px; margin: -5px; }
+
+  value { color: $fg_dim; font-feature-settings: "tnum"; }
+
+  marks { color: $fg_faint; }
+  &.horizontal marks.top { margin-bottom: 4px; }
+  &.horizontal marks.bottom { margin-top: 4px; }
+  &.vertical marks.top { margin-right: 4px; }
+  &.vertical marks.bottom { margin-left: 4px; }
+  &.horizontal indicator { min-height: 5px; min-width: 1px; }
+  &.vertical indicator { min-height: 1px; min-width: 5px; }
+  indicator { background-color: currentColor; }
+}
+
+progressbar {
+  color: $fg_dim;
+  font-size: smaller;
+  &.horizontal {
+    trough, progress { min-height: 6px; }
+    trough { min-width: 150px; }
+  }
+  &.vertical {
+    trough, progress { min-width: 6px; }
+    trough { min-height: 80px; }
+  }
+  trough {
+    border: none;
+    border-radius: 9999px;
+    background-color: $trough;
+  }
+  progress {
+    border: none;
+    border-radius: 9999px;
+    background-color: $accent;
+  }
+  &.osd {
+    min-width: 3px;
+    min-height: 3px;
+    background-color: transparent;
+    trough { border-style: none; border-radius: 0; background-color: transparent; box-shadow: none; }
+    progress { border-style: none; border-radius: 0; }
+  }
+}
+
+levelbar {
+  block {
+    min-width: 32px;
+    min-height: 6px;
+    border: none;
+    border-radius: 9999px;
+    &.low { background-color: $orange; }
+    &.high, &:not(.empty) { background-color: $green; }
+    &.full { background-color: darken($green, 4%); }
+    &.empty { background-color: $trough; }
+  }
+  &.vertical block { min-width: 6px; min-height: 32px; }
+  &.discrete {
+    &.horizontal block { margin: 0 1px; min-width: 24px; }
+    &.vertical block { margin: 1px 0; min-height: 24px; }
+  }
+  trough { padding: 0; border: none; background: none; }
+}
+
+// Overlay scrollbars: a thin pill that widens on hover.
+scrollbar {
+  background-color: transparent;
+  border: none;
+  transition: background-color 200ms ease-out;
+  -GtkScrollbar-has-backward-stepper: false;
+  -GtkScrollbar-has-forward-stepper: false;
+
+  slider {
+    min-width: 7px;
+    min-height: 7px;
+    margin: 0;
+    border: 3px solid transparent;
+    border-radius: 9999px;
+    background-clip: padding-box;
+    background-color: rgba($fg, 0.35);
+    transition: all 200ms ease-out;
+    &:hover { background-color: rgba($fg, 0.5); }
+    &:active { background-color: rgba($fg, 0.62); }
+    &:disabled { background-color: transparent; }
+  }
+
+  &.horizontal slider { min-width: 40px; }
+  &.vertical slider { min-height: 40px; }
+
+  &.overlay-indicator:not(.dragging):not(.hovering) {
+    slider {
+      min-width: 4px;
+      min-height: 4px;
+      border-width: 2px;
+      background-color: rgba($fg, 0.4);
+    }
+    &.horizontal slider { min-width: 40px; }
+    &.vertical slider { min-height: 40px; }
+  }
+  &.overlay-indicator.hovering, &.overlay-indicator.dragging { background-color: rgba($bg, 0.7); }
+
+  // Classic (non-overlay) scrollbars get a faint track
+  &:not(.overlay-indicator) { background-color: $view_alt; }
+  &.vertical:not(.overlay-indicator):dir(ltr) { border-left: 1px solid $border; }
+  &.horizontal:not(.overlay-indicator) { border-top: 1px solid $border; }
+
+  button { min-width: 0; min-height: 0; padding: 0; border: none; background: none; box-shadow: none; }
+  trough { background: none; border: none; }
+}
+
+scrolledwindow {
+  > junction { background-color: $view_alt; border: none; }
+  viewport.frame { border-style: none; }
+  overshoot, undershoot { background: none; }
+  &.frame, &.frame > border { border: 1px solid $border; }
+}

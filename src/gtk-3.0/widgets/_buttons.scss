@@ -1,0 +1,228 @@
+// Push buttons: white (light) or raised grey (dark) with a soft shadow,
+// accent-filled for the default action. Toolbar and headerbar buttons go flat.
+
+%flat-button {
+  background-color: transparent;
+  background-image: none;
+  border-color: transparent;
+  box-shadow: none;
+  &:hover { background-color: $hover; }
+  &:active, &:checked { background-color: $pressed; }
+  &:checked:hover { background-color: $pressed; }
+  &:disabled { background-color: transparent; }
+}
+
+button {
+  min-height: 22px;
+  min-width: 16px;
+  padding: 2px 10px;
+  border: 1px solid $button_border;
+  border-radius: $radius_button;
+  background-color: $button;
+  background-image: none;
+  color: $fg;
+  box-shadow: $button_shadow;
+  text-shadow: none;
+  -gtk-icon-shadow: none;
+  transition: background-color 120ms ease-out, box-shadow 120ms ease-out;
+
+  &:hover { background-color: $button_hover; }
+  &:active, &:checked {
+    background-color: $button_active;
+    box-shadow: none;
+    transition-duration: 40ms;
+  }
+  &:checked:hover { background-color: if($is_dark, lighten($button_active, 3%), darken($button_active, 2%)); }
+  &:disabled {
+    color: $disabled_fg;
+    background-color: if($is_dark, rgba($button, 0.5), rgba($button, 0.6));
+    box-shadow: none;
+    label { color: inherit; }
+  }
+  &:backdrop { transition: none; }
+
+  &.flat { @extend %flat-button; }
+
+  &.image-button {
+    min-width: 24px;
+    padding: 2px 4px;
+  }
+  &.text-button.image-button {
+    padding: 2px 8px;
+    label:first-child { margin-left: 2px; }
+    label:last-child { margin-right: 2px; }
+    image:first-child { margin-right: 4px; }
+  }
+
+  &.circular, &.circular-button {
+    border-radius: 9999px;
+    min-width: 24px;
+    padding: 2px;
+    label { padding: 0 2px; }
+  }
+
+  &.suggested-action, &.default:not(.flat) {
+    color: $accent_fg;
+    background-color: $accent;
+    border-color: $accent_active;
+    box-shadow: 0 1px 1px rgba($accent_active, 0.25);
+    label, image { color: inherit; }
+    &:hover { background-color: $accent_hover; }
+    &:active, &:checked { background-color: $accent_active; }
+    &:disabled { color: rgba($accent_fg, 0.6); background-color: rgba($accent, 0.45); border-color: transparent; }
+    &.flat { color: $accent; background-color: transparent; border-color: transparent; box-shadow: none; }
+  }
+
+  &.destructive-action {
+    color: #ffffff;
+    background-color: $red;
+    border-color: darken($red, 10%);
+    box-shadow: 0 1px 1px rgba($red, 0.25);
+    label, image { color: inherit; }
+    &:hover { background-color: lighten($red, 5%); }
+    &:active, &:checked { background-color: darken($red, 8%); }
+    &:disabled { color: rgba(#fff, 0.6); background-color: rgba($red, 0.45); border-color: transparent; }
+    &.flat { color: $red; background-color: transparent; border-color: transparent; box-shadow: none; }
+  }
+
+  &.osd {
+    color: #ffffff;
+    background-color: $osd_bg;
+    border-color: transparent;
+    box-shadow: none;
+    &:hover { background-color: lighten($osd_bg, 8%); }
+    &:active, &:checked { background-color: lighten($osd_bg, 14%); }
+    &.image-button { padding: 0; min-height: 36px; min-width: 36px; }
+  }
+
+  // Sidebar-style "pill" buttons in toolbars
+  &.sidebar-button { @extend %flat-button; }
+
+  // Buttons inside lists and treeviews
+  list row &.flat:hover, .view &.flat:hover { background-color: $hover; }
+}
+
+// Keep labels/images in buttons from painting their own backgrounds
+button label, button image { background: none; }
+
+// ----- linked groups (segmented look) -----
+.linked:not(.vertical) > button,
+.linked:not(.vertical) > menubutton > button,
+.linked:not(.vertical) > combobox > box > button.combo,
+.linked:not(.vertical) > spinbutton:not(.vertical),
+.linked:not(.vertical) > entry {
+  border-radius: 0;
+  border-right-style: none;
+  &:first-child { border-top-left-radius: $radius_button; border-bottom-left-radius: $radius_button; }
+  &:last-child {
+    border-top-right-radius: $radius_button;
+    border-bottom-right-radius: $radius_button;
+    border-right-style: solid;
+  }
+  &:only-child { border-radius: $radius_button; border-style: solid; }
+}
+.linked:not(.vertical) > menubutton:first-child > button,
+.linked:not(.vertical) > combobox:first-child > box > button.combo {
+  border-top-left-radius: $radius_button; border-bottom-left-radius: $radius_button;
+}
+.linked:not(.vertical) > menubutton:last-child > button,
+.linked:not(.vertical) > combobox:last-child > box > button.combo {
+  border-top-right-radius: $radius_button; border-bottom-right-radius: $radius_button;
+  border-right-style: solid;
+}
+
+.linked.vertical > button,
+.linked.vertical > entry {
+  border-radius: 0;
+  border-bottom-style: none;
+  &:first-child { border-top-left-radius: $radius_button; border-top-right-radius: $radius_button; }
+  &:last-child {
+    border-bottom-left-radius: $radius_button;
+    border-bottom-right-radius: $radius_button;
+    border-bottom-style: solid;
+  }
+  &:only-child { border-radius: $radius_button; border-style: solid; }
+}
+
+// ----- stack switcher: macOS segmented control -----
+stackswitcher, .stack-switcher {
+  > button {
+    min-width: 60px;
+    &:checked {
+      color: $fg;
+      background-color: if($is_dark, $button_active, $base);
+    }
+  }
+}
+// (the :not() chain outranks headerbar's flat-button rule)
+headerbar stackswitcher > button:not(.titlebutton):not(.suggested-action):not(.destructive-action):not(.combo),
+.titlebar stackswitcher > button:not(.titlebutton):not(.suggested-action):not(.destructive-action):not(.combo) {
+  min-height: 20px;
+  margin: 1px 0;
+  border-color: $button_border;
+  background-color: $trough;
+  box-shadow: none;
+  &:hover { background-color: $pressed; }
+  &:checked {
+    background-color: if($is_dark, $button_hover, $base);
+    box-shadow: $button_shadow;
+  }
+}
+
+// ----- menubutton / combobox -----
+menubutton {
+  > button > box > arrow, > button > arrow, arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    min-height: 16px;
+    min-width: 16px;
+  }
+  arrow.up { -gtk-icon-source: -gtk-icontheme('pan-up-symbolic'); }
+  arrow.left { -gtk-icon-source: -gtk-icontheme('pan-start-symbolic'); }
+  arrow.right { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
+}
+
+combobox {
+  arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    min-height: 16px;
+    min-width: 16px;
+    color: $fg_dim;
+  }
+  button.combo {
+    padding-right: 6px;
+    cellview:dir(ltr) { margin-left: 2px; }
+    cellview:dir(rtl) { margin-right: 2px; }
+  }
+  menu { padding: 5px; }
+  // combobox with entry
+  > .linked:not(.vertical) > entry { border-right-style: none; }
+  > .linked:not(.vertical) > button.combo { padding: 2px 4px; }
+  &:drop(active) { box-shadow: none; }
+}
+
+// ----- color / font / app chooser buttons -----
+colorbutton button, button.color {
+  padding: 3px;
+  colorswatch:only-child { border-radius: 4px; box-shadow: 0 0 0 1px $border; }
+}
+fontbutton button > box > label { font-weight: normal; }
+appchooserbutton cellview { margin-right: 4px; }
+
+// ----- modelbuttons (popover menus) -----
+modelbutton.flat, .menuitem.button.flat {
+  min-height: 24px;
+  padding: 0 10px;
+  border-radius: $radius_item;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  color: $fg;
+  &:hover, &:selected { background-color: $accent; color: $accent_fg; }
+  &:disabled { color: $disabled_fg; }
+  arrow {
+    background: none;
+    &.left { -gtk-icon-source: -gtk-icontheme('pan-start-symbolic'); }
+    &.right { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
+  }
+  check, radio { margin: 0 6px 0 0; }
+}

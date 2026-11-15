@@ -1,0 +1,45 @@
+// NalaMint additions appended to libadwaita's own stylesheet (extracted from the
+// installed libadwaita at build time). Uses libadwaita's named colors only, so
+// one file serves light and dark.
+
+// Traffic-light window buttons, same SVGs as the GTK3 theme
+windowcontrols {
+  border-spacing: 8px;
+
+  > button {
+    min-width: 16px;
+    min-height: 16px;
+    padding: 0;
+    margin: 0;
+    border-radius: 9999px;
+    background: none;
+    box-shadow: none;
+
+    > image {
+      min-width: 14px;
+      min-height: 14px;
+      padding: 0;
+      border-radius: 9999px;
+      color: transparent;           // hide the icon theme glyph
+      background-color: transparent;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 14px 14px;
+      box-shadow: none;
+    }
+
+    @each $kind in close, minimize, maximize {
+      &.#{$kind} > image { background-image: url("assets/titlebutton-#{$kind}.svg"); }
+      &.#{$kind}:hover > image { background-image: url("assets/titlebutton-#{$kind}-hover.svg"); }
+      &.#{$kind}:active > image { background-image: url("assets/titlebutton-#{$kind}-active.svg"); }
+      &.#{$kind}:backdrop:not(:hover) > image {
+        background-image: none;
+        background-color: unquote("alpha(@headerbar_fg_color, 0.18)");
+      }
+    }
+    &:hover, &:active { background: none; box-shadow: none; }
+  }
+}
+
+// macOS-style bold window titles
+headerbar .title, .title-widget .title, windowtitle .title { font-weight: bold; }

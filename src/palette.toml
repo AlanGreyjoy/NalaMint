@@ -1,0 +1,84 @@
+# NalaMint palette — single source of truth.
+# build.py turns each [variant] table into SCSS variables ($name) for the
+# GTK and Cinnamon styles, and into literal colors for the window frames.
+# Keys in [common] apply to both variants; a variant key overrides it.
+
+[common]
+radius_window   = "12px"
+radius_button   = "6px"
+radius_menu     = "10px"
+radius_item     = "5px"
+
+red             = "#ff3b30"
+orange          = "#ff9500"
+yellow          = "#ffcc00"
+green           = "#28cd41"
+
+# Window buttons (traffic lights)
+wm_close        = "#ff5f57"
+wm_close_ring   = "#e0443e"
+wm_close_glyph  = "#7e0508"
+wm_min          = "#febc2e"
+wm_min_ring     = "#dea123"
+wm_min_glyph    = "#8a5300"
+wm_max          = "#28c840"
+wm_max_ring     = "#1aab29"
+wm_max_glyph    = "#006500"
+
+[light]
+accent          = "#007aff"
+accent_fg       = "#ffffff"
+
+bg              = "#f6f6f7"   # window background
+base            = "#ffffff"   # views, entries, lists
+fg              = "#1d1d1f"
+headerbar       = "#ebebed"   # title bars, menubars, toolbars
+sidebar         = "#ececef"
+popover         = "#fbfbfc"   # menus, popovers, tooltips
+button          = "#ffffff"
+button_hover    = "#fbfbfb"
+button_active   = "#e4e4e7"
+border          = "rgba(0, 0, 0, 0.13)"
+border_strong   = "rgba(0, 0, 0, 0.22)"
+shade           = "rgba(0, 0, 0, 0.06)"   # hover tint on flat things
+shadow          = "rgba(0, 0, 0, 0.18)"
+selected_backdrop = "#dcdce0"
+
+wm_title        = "#3a3a3d"
+wm_title_unfocused = "#a5a5a9"
+wm_unfocused    = "#d6d6d9"
+wm_unfocused_ring = "#c4c4c8"
+wm_border       = "#c9c9cc"
+
+panel           = "rgba(0, 0, 0, 0)"        # transparent, like the macOS 26 menu bar
+panel_fg        = "#ffffff"                 # sits on the wallpaper, so white + shadow
+dock            = "rgba(246, 246, 248, 0.72)"
+
+[dark]
+accent          = "#0a84ff"
+accent_fg       = "#ffffff"
+
+bg              = "#28282b"
+base            = "#1e1e20"
+fg              = "#f2f2f5"
+headerbar       = "#323235"
+sidebar         = "#2c2c2f"
+popover         = "#2e2e31"
+button          = "#4a4a4e"
+button_hover    = "#545458"
+button_active   = "#606065"
+border          = "rgba(255, 255, 255, 0.12)"
+border_strong   = "rgba(255, 255, 255, 0.2)"
+shade           = "rgba(255, 255, 255, 0.07)"
+shadow          = "rgba(0, 0, 0, 0.5)"
+selected_backdrop = "#46464a"
+
+wm_title        = "#e3e3e6"
+wm_title_unfocused = "#7a7a7e"
+wm_unfocused    = "#4d4d51"
+wm_unfocused_ring = "#5a5a5e"
+wm_border       = "#151517"
+
+panel           = "rgba(0, 0, 0, 0)"
+panel_fg        = "#ffffff"
+dock            = "rgba(40, 40, 43, 0.70)"

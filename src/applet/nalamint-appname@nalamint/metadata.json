@@ -1,0 +1,7 @@
+{
+  "uuid": "nalamint-appname@nalamint",
+  "name": "NalaMint App Name",
+  "description": "Shows the focused app's name in bold, like the macOS menu bar. Click it for Show All Windows, Hide and Quit.",
+  "max-instances": 1,
+  "version": "1.0"
+}

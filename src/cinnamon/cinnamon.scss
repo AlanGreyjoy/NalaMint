@@ -1,0 +1,662 @@
+// NalaMint — Cinnamon desktop (St) theme.
+// Cinnamon falls back to its default theme for any element this file never
+// matches, so every element styled here must carry all the properties it needs.
+@import 'palette';
+
+$is_dark: $variant == 'dark';
+@function fade($c, $f) { @return rgba($c, alpha($c) * $f); }
+
+$fg_dim:       rgba($fg, 0.6);
+$fg_faint:     rgba($fg, 0.4);
+$hover_bg:     rgba($fg, if($is_dark, 0.1, 0.07));
+$active_bg:    rgba($fg, if($is_dark, 0.16, 0.12));
+$menu_bg:      if($is_dark, rgba(44, 44, 47, 0.97), rgba(251, 251, 252, 0.97));
+$menu_border:  if($is_dark, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
+$menu_shadow:  0 6px 18px rgba(0, 0, 0, if($is_dark, 0.5, 0.22));
+$entry_bg:     if($is_dark, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.05));
+$osd_bg:       if($is_dark, rgba(36, 36, 38, 0.88), rgba(246, 246, 247, 0.9));
+$separator:    rgba($fg, 0.12);
+$trough:       rgba($fg, if($is_dark, 0.18, 0.12));
+// A see-through panel sits on the wallpaper: no edge line, shadowed text/icons,
+// brighter hover pills.
+$panel_clear:  alpha($panel) < 0.3;
+$panel_hover:  rgba($panel_fg, if($panel_clear, 0.2, if($is_dark, 0.12, 0.09)));
+$panel_active: rgba($panel_fg, if($panel_clear, 0.3, if($is_dark, 0.2, 0.14)));
+$panel_edge:   if($panel_clear, transparent, $separator);
+$panel_text_shadow: 0 0 4px rgba(0, 0, 0, 0.85);
+
+stage {
+  color: $fg;
+}
+
+// ================= Panel (menu bar) =================
+
+#panel { font-weight: normal; }
+#panel:highlight { background-color: rgba($accent, 0.25); }
+
+.panel-top, .panel-bottom, .panel-left, .panel-right {
+  font-weight: normal;
+  color: $panel_fg;
+  background-color: $panel;
+}
+.panel-top { box-shadow: inset 0 -1px $panel_edge; }
+.panel-bottom { box-shadow: inset 0 1px $panel_edge; }
+.panel-left { box-shadow: inset -1px 0 $panel_edge; }
+.panel-right { box-shadow: inset 1px 0 $panel_edge; }
+
+@if $panel_clear {
+  .panel-top StLabel, .panel-bottom StLabel, .panel-left StLabel, .panel-right StLabel {
+    text-shadow: $panel_text_shadow;
+  }
+  .panel-top StIcon, .panel-bottom StIcon, .panel-left StIcon, .panel-right StIcon {
+    icon-shadow: $panel_text_shadow;
+  }
+}
+.panel-dummy { background-color: rgba($accent, 0.3); }
+
+.panelLeft { spacing: 2px; padding-left: 4px; }
+.panelLeft.vertical { padding: 4px 0 0; }
+.panelCenter { spacing: 2px; }
+.panelRight:ltr { padding-left: 4px; padding-right: 2px; spacing: 0; }
+.panelRight:rtl { padding-right: 4px; padding-left: 2px; spacing: 0; }
+.panelRight.vertical { padding: 0; }
+.panelRight:dnd, .panelLeft:dnd, .panelCenter:dnd { background-color: rgba($accent, 0.2); }
+
+// Applets: rounded hover pills inset from the panel edges
+.applet-box {
+  padding: 0 7px;
+  margin: 3px 1px;
+  spacing: 6px;
+  border-radius: $radius_button;
+  color: $panel_fg;
+  text-align: center;
+  transition-duration: 100ms;
+}
+.applet-box:hover, .applet-box:checked { background-color: $panel_hover; }
+.applet-box:active { background-color: $panel_active; }
+.applet-box.vertical { padding: 6px 0; margin: 1px 3px; }
+.applet-label { font-weight: normal; color: $panel_fg; }
+.applet-icon { color: $panel_fg; icon-size: 16px; }
+.system-status-icon { icon-size: 16px; color: $panel_fg; }
+
+.applet-separator { padding: 1px 4px; }
+.applet-separator-line { width: 1px; background: rgba($panel_fg, 0.2); }
+.applet-separator-line-vertical { height: 1px; background: rgba($panel_fg, 0.2); }
+
+.applet-cornerbar { width: 6px; background-color: transparent; border: none; }
+.applet-cornerbar-box:hover > .applet-cornerbar { background-color: $panel_hover; }
+
+.panel-launchers { spacing: 2px; }
+.systray { padding: 0; spacing: 0; }
+.panel-top .workspace-switcher, .panel-bottom .workspace-switcher { padding: 0 4px; }
+
+// Grouped window list: pills with a thin accent bar for running apps
+.grouped-window-list-item-box {
+  padding: 0 7px;
+  margin: 3px 1px;
+  border-radius: $radius_button;
+  border: 0 solid transparent;
+  transition-duration: 100ms;
+}
+.grouped-window-list-item-box.top, .grouped-window-list-item-box.bottom { border-bottom-width: 2px; }
+.grouped-window-list-item-box.left { padding: 0; border-left-width: 2px; }
+.grouped-window-list-item-box.right { padding: 0; border-right-width: 2px; }
+.grouped-window-list-item-box.left StBin { padding-left: 1px; }
+.grouped-window-list-item-box.right StBin { padding-right: 0; }
+.grouped-window-list-item-box:hover { background-color: $panel_hover; }
+.grouped-window-list-item-box:focus { background-color: $panel_active; }
+.grouped-window-list-item-box:active { border-color: rgba($accent, 0.85); }
+.grouped-window-list-item-box .progress { background-color: rgba($green, 0.7); }
+.grouped-window-list-item-label { width: 15em; min-width: 5px; }
+.grouped-window-list-item-demands-attention { background-color: rgba($orange, 0.55); }
+.grouped-window-list-button-label { padding-left: 4px; }
+.grouped-window-list-number-label { font-size: 11px; }
+.grouped-window-list-badge { border-radius: 99px; background-color: $menu_bg; color: $fg; }
+.grouped-window-list-notifications-badge { border-radius: 99px; background-color: $red; color: #ffffff; }
+.grouped-window-list-notifications-badge-label { font-size: 11px; }
+.grouped-window-list-thumbnail-label { padding-left: 4px; }
+.grouped-window-list-thumbnail-alert { background: rgba($orange, 0.3); }
+.grouped-window-list-thumbnail-menu {
+  margin: 6px;
+  padding: 6px;
+  border: 1px solid $menu_border;
+  border-radius: $radius_menu;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+  .item-box { padding: 6px; border-radius: 8px; }
+  .item-box:selected, .item-box:hover { background-color: $hover_bg; }
+}
+
+.window-list-box { spacing: 4px; padding-left: 4px; }
+.window-list-item-box {
+  padding: 0 7px;
+  margin: 3px 0;
+  border-radius: $radius_button;
+  color: rgba($panel_fg, 0.8);
+}
+.window-list-item-box:hover { background-color: $panel_hover; color: $panel_fg; }
+.window-list-item-box:active, .window-list-item-box:checked, .window-list-item-box:focus {
+  background-color: $panel_active;
+  color: $panel_fg;
+}
+.window-list-item-demands-attention { background-color: rgba($orange, 0.55); }
+.window-list-preview {
+  padding: 10px;
+  spacing: 4px;
+  border: 1px solid $menu_border;
+  border-radius: $radius_menu;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+}
+
+// ================= Popup menus =================
+
+.menu {
+  min-width: 15em;
+  padding: 0;
+  color: $fg;
+}
+.popup-menu-content {
+  padding: 5px;
+  border: 1px solid $menu_border;
+  border-radius: $radius_menu;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+}
+.popup-menu-item, .popup-combobox-item, .popup-sub-menu .popup-menu-item {
+  padding: 5px 10px;
+  margin: 0;
+  spacing: 8px;
+  border-radius: $radius_item;
+  font-weight: normal;
+  color: $fg;
+  transition-duration: 60ms;
+}
+.popup-menu-item:active, .popup-combobox-item:active {
+  color: $accent_fg;
+  background-color: $accent;
+}
+.popup-menu-item:checked { font-weight: bold; }
+.popup-menu-item:insensitive { color: $fg_faint; background: none; }
+.popup-menu-arrow, .popup-menu-icon { icon-size: 16px; }
+.popup-inactive-menu-item { color: $fg; }
+.popup-inactive-menu-item:insensitive { color: $fg_faint; }
+.popup-subtitle-menu-item { font-weight: bold; color: $fg_dim; }
+.popup-alternating-menu-item:alternate { font-weight: normal; }
+
+.popup-sub-menu {
+  margin: 2px 0;
+  border: none;
+  border-radius: 8px;
+  background-color: rgba($fg, if($is_dark, 0.05, 0.04));
+}
+.popup-sub-menu .popup-menu-item { padding: 5px 10px 5px 22px; background-color: transparent; }
+.popup-sub-menu .popup-menu-item:active { color: $accent_fg; background-color: $accent; }
+.popup-sub-menu StScrollBar { padding: 3px; }
+
+.popup-separator-menu-item {
+  height: 1px;
+  margin: 4px 0;
+  -gradient-height: 1px;
+  -gradient-start: $separator;
+  -gradient-end: $separator;
+  -margin-horizontal: 6px;
+}
+.separator {
+  height: 1px;
+  -gradient-height: 1px;
+  -gradient-start: $separator;
+  -gradient-end: $separator;
+  -margin-horizontal: 0;
+}
+
+.popup-combo-menu {
+  padding: 5px;
+  border: 1px solid $menu_border;
+  border-radius: $radius_menu;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+}
+.popup-device-menu-item { spacing: .5em; color: $fg; font-weight: bold; }
+.popup-device-menu-item .popup-inactive-menu-item { font-weight: normal; color: $fg; }
+.nm-menu-item-icons { spacing: .5em; }
+
+// Sliders (volume, brightness)
+.popup-slider-menu-item, .slider {
+  height: 1em;
+  min-width: 15em;
+  color: if($is_dark, #e8e8ea, $accent);  // knob color
+  -slider-height: 4px;
+  -slider-background-color: $trough;
+  -slider-active-background-color: $accent;
+  -slider-border-color: transparent;
+  -slider-active-border-color: transparent;
+  -slider-border-width: 0;
+  -slider-handle-radius: 8px;
+}
+
+// Toggles, checkboxes, radios (images built from the palette)
+.toggle-switch {
+  width: 38px;
+  height: 22px;
+  background-size: contain;
+  background-image: url("assets/toggle-off.svg");
+}
+.toggle-switch:checked { background-image: url("assets/toggle-on.svg"); }
+
+.check-box CinnamonGenericContainer, .check-box-2 StBoxLayout { spacing: 0.7em; }
+.check-box StBin, .check-box-2 StBin {
+  width: 16px;
+  height: 16px;
+  background-image: url("assets/checkbox-off.svg");
+}
+.check-box:checked StBin, .check-box-2:checked StBin { background-image: url("assets/checkbox.svg"); }
+.radiobutton CinnamonGenericContainer { spacing: 0.7em; }
+.radiobutton StBin {
+  width: 16px;
+  height: 16px;
+  background-image: url("assets/radio-off.svg");
+}
+.radiobutton:checked StBin { background-image: url("assets/radio.svg"); }
+
+// ================= Start menu (menu@cinnamon.org) =================
+
+.appmenu-background .popup-menu-content { padding: 0; }
+.appmenu-main-box { spacing: 8px; }
+.appmenu-right-box { spacing: 8px; padding: 10px; }
+.appmenu-categories-applications-box { spacing: 12px; }
+.appmenu-applications-box { padding-right: 4px; }
+.appmenu-search-box { spacing: 8px; }
+.appmenu-search-entry-icon { icon-size: 16px; color: $fg_dim; }
+.appmenu-sidebar {
+  padding: 10px 0;
+  border-radius: $radius_menu 0 0 $radius_menu;
+  border-right-width: 1px;
+  border-color: $separator;
+  background-color: rgba($fg, if($is_dark, 0.04, 0.03));
+}
+.appmenu-system-box { spacing: 8px; }
+
+.appmenu-application-button, .appmenu-application-button-selected,
+.appmenu-category-button, .appmenu-category-button-selected, .appmenu-category-button-greyed,
+.appmenu-sidebar-button {
+  padding: 6px 8px;
+  spacing: 6px;
+  border-radius: 7px;
+  color: $fg;
+  transition-duration: 60ms;
+}
+.appmenu-sidebar-button { padding: 4px 6px; margin: 0 10px; }
+.appmenu-sidebar-button:hover { background-color: $hover_bg; }
+.appmenu-application-button-selected { color: $accent_fg; background-color: $accent; }
+.appmenu-application-button-selected .appmenu-application-button-description { color: rgba($accent_fg, 0.8); }
+.appmenu-application-button:highlighted { font-weight: bold; }
+.appmenu-application-button-label, .appmenu-category-button-label { padding: 0; }
+.appmenu-application-button-description { color: $fg_dim; }
+.appmenu-category-button:hover { background-color: $hover_bg; }
+.appmenu-category-button-selected { background-color: rgba($accent, if($is_dark, 0.32, 0.16)); }
+.appmenu-category-button-greyed { color: $fg_faint; font-style: italic; }
+.appmenu-system-button {
+  padding: 8px;
+  border: 1px solid $menu_border;
+  border-radius: 9999px;
+  background-color: rgba($fg, 0.06);
+  color: $fg;
+}
+.appmenu-system-button:hover { background-color: $accent; color: $accent_fg; border-color: transparent; }
+
+// Text entries used by the shell
+#menu-search-entry, #appmenu-search-entry, .expo-workspaces-name-entry,
+.prompt-dialog-password-entry, .run-dialog-entry {
+  min-height: 22px;
+  padding: 5px 10px;
+  border: 1px solid $menu_border;
+  border-radius: 8px;
+  color: $fg;
+  background-color: $entry_bg;
+  caret-color: $fg;
+  caret-size: 1px;
+  selected-color: $accent_fg;
+  selection-background-color: $accent;
+}
+#menu-search-entry:focus, #appmenu-search-entry:focus, .expo-workspaces-name-entry:focus,
+.prompt-dialog-password-entry:focus, .run-dialog-entry:focus {
+  border-color: $accent;
+  box-shadow: 0 0 0 2px rgba($accent, 0.3);
+}
+#menu-search-entry StLabel.hint-text, #appmenu-search-entry StLabel.hint-text,
+.prompt-dialog-password-entry StLabel.hint-text, .run-dialog-entry StLabel.hint-text {
+  color: $fg_faint;
+}
+#menu-search-entry StIcon.peek-password, #appmenu-search-entry StIcon.peek-password,
+.prompt-dialog-password-entry StIcon.peek-password { icon-size: 16px; color: $fg_dim; }
+// Widths the default theme sets per entry (lost once our shared rule matches them)
+.run-dialog-entry { width: 28em; padding: 7px 12px; font-size: 1.15em; }   // Spotlight-sized
+.prompt-dialog-password-entry { width: 20em; }
+
+// ================= Notifications =================
+
+#notification {
+  width: 30em;
+  padding: 12px;
+  border: 1px solid $menu_border;
+  border-radius: 14px;
+  color: $fg;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+  margin-from-right-edge-of-screen: 12px;
+  spacing-rows: 8px;
+  spacing-columns: 10px;
+}
+#notification.multi-line-notification { padding-bottom: 12px; color: $fg; }
+#notification-body { spacing: 4px; }
+#notification-actions { spacing: 8px; }
+.notification-with-image { min-height: 159px; }
+.notification-icon-button, .notification-button {
+  padding: 5px 14px;
+  border-radius: 8px;
+  font-weight: normal;
+  color: $fg;
+  background-color: rgba($fg, if($is_dark, 0.1, 0.06));
+}
+.notification-icon-button { padding: 6px; }
+.notification-icon-button:hover, .notification-button:hover { background-color: rgba($fg, if($is_dark, 0.16, 0.1)); }
+.notification-icon-button:active, .notification-button:active { color: $accent_fg; background-color: $accent; }
+.notification-icon-button:focus, .notification-button:focus { box-shadow: inset 0 0 0 2px rgba($accent, 0.5); }
+
+// ================= OSDs, tooltips, popups =================
+
+.resize-popup, .workspace-switch-osd, .info-osd, .media-keys-osd {
+  padding: 20px;
+  border: 1px solid $menu_border;
+  border-radius: 16px;
+  color: $fg;
+  background-color: $osd_bg;
+  text-align: center;
+}
+.workspace-switch-osd, .media-keys-osd { font-weight: bold; font-size: 1.1em; }
+.media-keys-osd {
+  margin-bottom: 1em;
+  padding: 12px 22px;
+  spacing: 12px;
+  border-radius: 9999px;
+}
+.media-keys-osd > * { spacing: 12px; }
+.media-keys-osd StIcon { icon-size: 28px; }
+.media-keys-osd StLabel:ltr { margin-right: 6px; }
+.media-keys-osd StLabel:rtl { margin-left: 6px; }
+.media-keys-osd .level {
+  min-width: 150px;
+  -barlevel-height: 5px;
+  -barlevel-background-color: $trough;
+  -barlevel-active-background-color: $fg;
+  -barlevel-amplify-color: $orange;
+  -barlevel-amplify-separator-width: 3px;
+}
+.media-keys-osd .level:ltr { margin-right: 6px; }
+.media-keys-osd .level:rtl { margin-left: 6px; }
+.media-keys-osd .level-bar { border-radius: 3px; background-color: $fg; }
+
+#Tooltip {
+  padding: 4px 9px;
+  margin: 4px;
+  border: 1px solid $menu_border;
+  border-radius: 6px;
+  color: $fg;
+  background-color: $menu_bg;
+  text-align: center;
+}
+
+.tile-preview {
+  border: 1px solid rgba($accent, 0.7);
+  border-radius: $radius_window;
+  background-color: rgba($accent, 0.18);
+}
+
+// ================= Alt-Tab =================
+
+#altTabPopup { padding: 8px; spacing: 16px; }
+.switcher-list {
+  padding: 14px;
+  border: 1px solid $menu_border;
+  border-radius: 20px;
+  background-color: $osd_bg;
+  box-shadow: $menu_shadow;
+}
+.switcher-list-item-container { spacing: 10px; }
+.switcher-list .item-box {
+  padding: 8px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background-color: transparent;
+}
+.switcher-list .item-box:outlined { border-color: $accent; }
+.switcher-list .item-box:selected { border-color: transparent; background-color: $active_bg; }
+.switcher-list .thumbnail-box { padding: 0; spacing: 4px; }
+.switcher-list .thumbnail { width: 256px; }
+.switcher-preview-backdrop { background-color: rgba(0, 0, 0, 0.4); }
+.switcher-arrow { background-color: transparent; border-color: transparent; color: $fg; }
+.thumbnail-scroll-gradient-left, .thumbnail-scroll-gradient-right { width: 0; }
+
+// ================= Calendar =================
+
+.calendar { margin-top: 16px; spacing-rows: 2px; spacing-columns: 2px; }
+.calendar-main-box { margin: 8px; }
+.calendar-events-main-box {
+  height: 300px;
+  min-width: 320px;
+  margin-right: 14px;
+  border-right-width: 1px;
+  border-color: $separator;
+}
+.calendar-today-home-button, .calendar-today-home-button-enabled {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+.calendar-today-home-button-enabled:hover { background-color: $hover_bg; }
+.calendar-today-day-label { text-align: center; }
+.calendar-day-base {
+  width: 2.3em;
+  height: 2.3em;
+  border-radius: 9999px;
+  text-align: center;
+  color: $fg;
+}
+.calendar-day-base:hover { background-color: $hover_bg; }
+.calendar-day-heading { margin-top: 10px; height: 1.6em; color: $fg_dim; font-size: 0.85em; }
+.calendar-work-day, .calendar-nonwork-day { color: $fg; }
+.calendar-nonwork-day { color: $fg_dim; }
+.calendar-other-month-day { color: $fg_faint; }
+.calendar-today { color: $accent_fg; background-color: $accent; font-weight: bold; box-shadow: none; }
+.calendar-today:hover { background-color: lighten($accent, 5%); }
+.calendar-not-today:selected { background-color: $active_bg; }
+.calendar-day-event-dot-box { margin-top: 1.7em; max-rows: 1; }
+.calendar-day-event-dot { margin: 1px; width: 4px; height: 4px; border-radius: 2px; }
+.calendar-events-date-label { text-align: center; }
+.calendar-events-no-events-button { margin: 6px 0; padding: 6px; border-radius: 8px; color: $fg_dim; }
+.calendar-events-no-events-button:hover { color: $fg; background-color: $hover_bg; }
+.calendar-events-no-events-icon { icon-size: 96px; color: $fg_faint; }
+.calendar-events-no-events-label { text-align: center; margin-top: 16px; }
+.calendar-events-scrollbox { margin-top: 8px; }
+.calendar-event-button { margin: 3px 0; border-radius: 8px; border: 1px solid transparent; }
+.calendar-event-button:hover { background-color: $hover_bg; border-color: $separator; }
+.calendar-event-color-strip { width: 3px; border-radius: 2px; }
+
+// ================= Dialogs =================
+
+.dialog {
+  padding: 20px;
+  border: 1px solid $menu_border;
+  border-radius: 16px;
+  color: $fg;
+  background-color: $menu_bg;
+  box-shadow: $menu_shadow;
+}
+.dialog .dialog-button {
+  padding: 8px 16px;
+  border: 1px solid $menu_border;
+  border-radius: 8px;
+  font-weight: normal;
+  color: $fg;
+  background-color: rgba($fg, if($is_dark, 0.1, 0.05));
+}
+.dialog .dialog-button:hover { background-color: rgba($fg, if($is_dark, 0.16, 0.09)); }
+.dialog .dialog-button:active, .dialog .dialog-button:checked { background-color: rgba($fg, 0.2); }
+.dialog .dialog-button:focus { box-shadow: inset 0 0 0 2px rgba($accent, 0.5); }
+.dialog .dialog-button:insensitive { color: $fg_faint; }
+.dialog .dialog-button:default { color: $accent_fg; background-color: $accent; border-color: transparent; }
+.dialog .dialog-button:default:hover { background-color: lighten($accent, 6%); }
+.dialog .dialog-button:destructive-action { color: #ffffff; background-color: $red; border-color: transparent; }
+.dialog .dialog-button:destructive-action:hover { background-color: lighten($red, 6%); }
+
+// ================= Scrollbars =================
+
+StScrollView StScrollBar { min-width: 8px; min-height: 8px; }
+StScrollBar StBin#trough { border-radius: 8px; background-color: transparent; }
+StScrollBar StButton#vhandle, StScrollBar StButton#hhandle {
+  border-radius: 8px;
+  background-color: rgba($fg, 0.3);
+}
+StScrollBar StButton#vhandle:hover, StScrollBar StButton#hhandle:hover { background-color: rgba($fg, 0.45); }
+
+// Media player position bar in the sound menu (drawn flat, full height)
+.sound-player .slider {
+  height: 4px;
+  min-width: 15em;
+  color: transparent;
+  -slider-height: 4px;
+  -slider-background-color: $trough;
+  -slider-active-background-color: $fg;
+  -slider-border-color: transparent;
+  -slider-active-border-color: transparent;
+  -slider-border-width: 0;
+  -slider-handle-radius: 0;
+}
+
+// ================= Text the default theme hard-codes white =================
+// (needed so the light variant stays readable)
+
+.user-icon { background-size: contain; border-radius: 99px; color: $fg; border-color: transparent; }
+.user-widget.horizontal, .user-widget.vertical { spacing: 6px; }
+.user-widget.vertical .user-widget-label {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: $fg;
+  text-align: center;
+}
+
+.sound-player-overlay {
+  width: 290px;
+  padding: 12px;
+  spacing: 4px;
+  color: #ffffff;
+  background-color: rgba(0, 0, 0, 0.55);
+}
+.sound-player-overlay StLabel, .sound-player-overlay StIcon { color: #ffffff; }
+.sound-player-generic-coverart { background-color: rgba($fg, 0.1); }
+
+.device-box .device-icon { icon-size: 1.6em; color: $fg; }
+.device-box .device-labels { margin-left: 8px; spacing: 4px; }
+.device-box .device-labels .primary-label { color: $fg; font-weight: bold; }
+.device-box .device-labels .status-label { color: $fg_dim; }
+
+.calendar-event-time-past { color: $fg_faint; font-weight: bold; }
+.calendar-event-time-present, .calendar-event-time-future { color: $fg; font-weight: bold; }
+.calendar-event-time-present:all-day { color: $accent; }
+.calendar-event-countdown { color: $fg_dim; font-size: 0.85em; }
+.calendar-event-summary { color: $fg_dim; }
+
+// ================= Panels over bright wallpaper =================
+// The nalamint-menubar extension adds .nalamint-on-light to a panel when the
+// wallpaper under it is bright; text and icons then go dark with a light halo.
+@if $panel_clear {
+  $on_light_fg: #1d1d1f;
+  $on_light_halo: 0 0 4px rgba(255, 255, 255, 0.8);
+
+  .nalamint-on-light .applet-box, .nalamint-on-light .applet-label,
+  .nalamint-on-light .applet-icon, .nalamint-on-light .system-status-icon,
+  .nalamint-on-light .window-list-item-box, .nalamint-on-light .window-list-item-box:hover {
+    color: $on_light_fg;
+  }
+  .panel-top.nalamint-on-light StLabel, .panel-bottom.nalamint-on-light StLabel,
+  .panel-left.nalamint-on-light StLabel, .panel-right.nalamint-on-light StLabel {
+    text-shadow: $on_light_halo;
+  }
+  // Icons get a soft dark outline instead: some tray icons are plain white
+  // images that cannot be recolored, and this keeps them visible.
+  .panel-top.nalamint-on-light StIcon, .panel-bottom.nalamint-on-light StIcon,
+  .panel-left.nalamint-on-light StIcon, .panel-right.nalamint-on-light StIcon {
+    icon-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  }
+  .nalamint-on-light .applet-box:hover, .nalamint-on-light .applet-box:checked,
+  .nalamint-on-light .grouped-window-list-item-box:hover,
+  .nalamint-on-light .window-list-item-box:hover,
+  .nalamint-on-light .applet-cornerbar-box:hover > .applet-cornerbar {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+  .nalamint-on-light .applet-box:active, .nalamint-on-light .grouped-window-list-item-box:focus,
+  .nalamint-on-light .window-list-item-box:focus, .nalamint-on-light .window-list-item-box:checked {
+    background-color: rgba(0, 0, 0, 0.16);
+  }
+  .nalamint-on-light .applet-separator-line { background: rgba(0, 0, 0, 0.2); }
+}
+
+// ================= Dock (bottom panel) =================
+// `tools/layout.py dock` puts the window list in the bottom panel's center
+// zone. The window list forces its items to the full panel height, so the
+// rounded bar is drawn behind the panel by the nalamint-menubar extension as
+// .nalamint-dock-plate (with the blurred wallpaper under it), inset from the
+// panel edges by the -nalamint-* lengths below. Without the extension the
+// center zone itself is drawn as a (full-height) rounded bar.
+$dock_radius: 18px;
+$dock_border: if($is_dark, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.55));
+
+.panel-bottom .panelCenter {
+  padding: 0 6px;
+  spacing: 0;
+  border-radius: $dock_radius;
+  background-color: $dock;
+}
+.panel-bottom.nalamint-dock .panelCenter { background-color: transparent; }
+
+.nalamint-dock-plate {
+  -nalamint-inset-top: 3px;
+  -nalamint-inset-bottom: 5px;
+  -nalamint-outset-x: 0;
+  border: 1px solid $dock_border;
+  border-radius: $dock_radius;
+  background-color: $dock;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.panel-bottom .grouped-window-list-box { spacing: 6px; }
+.panel-bottom .grouped-window-list-item-box,
+.panel-bottom .grouped-window-list-item-box.bottom,
+.panel-bottom .grouped-window-list-item-box:hover,
+.panel-bottom .grouped-window-list-item-box:focus {
+  margin: 0;
+  border-width: 0;
+  background-color: transparent;
+  transition-duration: 120ms;
+}
+// Running apps: a small dot under the icon. St positions background images in
+// px only; these values fit 40px icons in a 64px panel (tools/layout.py dock).
+.panel-bottom .grouped-window-list-item-box:active,
+.panel-bottom .grouped-window-list-item-box:active:hover,
+.panel-bottom .grouped-window-list-item-box:active:focus {
+  background-image: url("assets/dock-dot.svg");
+  background-position: 21px 53px;
+}
+.panel-bottom .grouped-window-list-item-box StIcon { icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); }
+
+// Launchpad's dock item: an applet, but it should look like the app icons
+// next to it (no hover pill, same icon shadow)
+.panel-bottom .nalamint-launchpad-nalamint-applet,
+.panel-bottom .nalamint-launchpad-nalamint-applet:hover,
+.panel-bottom .nalamint-launchpad-nalamint-applet:checked,
+.panel-bottom .nalamint-launchpad-nalamint-applet:active { background-color: transparent; }
+.panel-bottom .nalamint-launchpad-nalamint-applet StIcon { icon-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); }
+
+// Launchpad's own look (overlay, folders, search) is in the applet's
+// stylesheet.css, so it works under any desktop theme.

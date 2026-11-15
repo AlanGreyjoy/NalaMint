@@ -1,0 +1,7 @@
+{
+  "menu-icon": {
+    "type": "iconfilechooser",
+    "default": "cinnamon-symbolic",
+    "description": "Panel icon"
+  }
+}

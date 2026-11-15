@@ -1,0 +1,126 @@
+// Text fields: white wells with an accent focus ring.
+
+%entry-focus {
+  border-color: $accent;
+  box-shadow: 0 0 0 3px $focus_glow;
+}
+
+entry {
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 1px solid $entry_border;
+  border-radius: $radius_button;
+  background-color: $entry_bg;
+  background-image: none;
+  color: $fg;
+  caret-color: $fg;
+  box-shadow: none;
+  transition: border-color 120ms, box-shadow 120ms;
+
+  &:focus { @extend %entry-focus; outline: none; }
+  &:disabled { color: $disabled_fg; background-color: fade($entry_bg, 0.5); border-color: fade($entry_border, 0.6); }
+  &:backdrop { transition: none; }
+
+  image {
+    color: $fg_dim;
+    &:hover { color: $fg; }
+    &.left { margin-right: 6px; }
+    &.right { margin-left: 6px; }
+  }
+
+  selection { color: $accent_fg; background-color: $accent; }
+  &:backdrop selection { color: $fg; background-color: $selected_backdrop; }
+  undershoot.left, undershoot.right { background: none; }
+
+  &.flat, &.flat:focus {
+    border: none;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 2px;
+  }
+
+  &.search { border-radius: $radius_button; }
+
+  &.error {
+    color: $red;
+    border-color: $red;
+    &:focus { box-shadow: 0 0 0 3px rgba($red, 0.35); }
+  }
+  &.warning {
+    color: $orange;
+    border-color: $orange;
+    &:focus { box-shadow: 0 0 0 3px rgba($orange, 0.35); }
+  }
+
+  > progress, progress {
+    margin: 0 -6px;
+    border-style: none none solid;
+    border-width: 2px;
+    border-color: $accent;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+  }
+
+  // Inline completion popup
+  > block-cursor { color: $base; background-color: $fg; }
+}
+
+// Spin buttons: entry on the left, - and + on the right
+spinbutton {
+  &:not(.vertical) {
+    padding: 0;
+    border: 1px solid $entry_border;
+    border-radius: $radius_button;
+    background-color: $entry_bg;
+    &:focus { @extend %entry-focus; }
+    > entry {
+      min-width: 28px;
+      border: none;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+      padding: 2px 8px;
+    }
+    > button {
+      min-width: 20px;
+      padding: 0 3px;
+      border: none;
+      border-left: 1px solid $border;
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
+      color: $fg_dim;
+      &:hover { color: $fg; background-color: $hover; }
+      &:active { background-color: $pressed; }
+      &:disabled { color: $disabled_fg; }
+      &:last-child { border-top-right-radius: $radius_button - 1; border-bottom-right-radius: $radius_button - 1; }
+    }
+    &:disabled { background-color: fade($entry_bg, 0.5); }
+  }
+  &.vertical {
+    > entry { min-width: 32px; padding: 2px; border-radius: 0; }
+    > button.up { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-bottom-style: none; }
+    > button.down { border-top-left-radius: 0; border-top-right-radius: 0; border-top-style: none; }
+  }
+}
+
+// Plain text views
+textview {
+  text {
+    color: $fg;
+    background-color: $base;
+    selection { color: $accent_fg; background-color: $accent; }
+    &:backdrop selection { color: $fg; background-color: $selected_backdrop; }
+  }
+  border { background-color: $bg; }
+}
+
+// Text-entry drag handles (touch)
+cursor-handle {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border-style: none;
+}

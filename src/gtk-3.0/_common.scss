@@ -1,0 +1,49 @@
+// NalaMint GTK3 — shared by gtk.css (light) and gtk-dark.css.
+// $variant and the palette come from the generated _palette.scss.
+
+$is_dark: $variant == 'dark';
+
+// GTK's own alpha() for currentColor; Sass's alpha() means something else.
+@function gtkalpha($c, $a) { @return unquote("alpha(#{$c}, #{$a})"); }
+
+// Scale a color's existing alpha (Sass rgba() would replace it).
+@function fade($c, $f) { @return rgba($c, alpha($c) * $f); }
+
+// ---------- derived colors ----------
+$fg_dim:          rgba($fg, 0.55);
+$fg_faint:        rgba($fg, 0.38);
+$disabled_fg:     rgba($fg, 0.32);
+$accent_hover:    lighten($accent, 5%);
+$accent_active:   darken($accent, 8%);
+$link:            if($is_dark, lighten($accent, 12%), $accent);
+$focus_glow:      rgba($accent, if($is_dark, 0.5, 0.35));
+$hover:           $shade;
+$pressed:         if($is_dark, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.1));
+$trough:          if($is_dark, rgba(255, 255, 255, 0.13), rgba(0, 0, 0, 0.09));
+$entry_bg:        if($is_dark, rgba(255, 255, 255, 0.06), $base);
+$entry_border:    if($is_dark, rgba(255, 255, 255, 0.14), rgba(0, 0, 0, 0.17));
+$button_border:   if($is_dark, rgba(255, 255, 255, 0.07), rgba(0, 0, 0, 0.13));
+$button_shadow:   if($is_dark, (0 1px 1px rgba(0, 0, 0, 0.35), inset 0 1px rgba(255, 255, 255, 0.07)),
+                               (0 1px 1px rgba(0, 0, 0, 0.07)));
+$knob:            if($is_dark, #e8e8ea, #ffffff);
+$knob_shadow:     (0 1px 2px rgba(0, 0, 0, 0.28), 0 0 0 0.5px rgba(0, 0, 0, 0.12));
+$popover_border:  if($is_dark, rgba(255, 255, 255, 0.13), rgba(0, 0, 0, 0.1));
+$menu_shadow:     (0 8px 24px rgba(0, 0, 0, if($is_dark, 0.5, 0.2)), 0 0 0 1px $popover_border);
+$sidebar_selected: rgba($accent, if($is_dark, 0.32, 0.16));
+$view_alt:        if($is_dark, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.025));
+$info_bg:         mix($accent, $bg, 14%);
+$warning_bg:      mix($orange, $bg, 18%);
+$error_bg:        mix($red, $bg, 16%);
+$success_bg:      mix($green, $bg, 16%);
+$osd_bg:          rgba(if($is_dark, #2e2e31, #3a3a3d), 0.9);
+
+@import 'widgets/base';
+@import 'widgets/buttons';
+@import 'widgets/entries';
+@import 'widgets/toggles';
+@import 'widgets/ranges';
+@import 'widgets/views';
+@import 'widgets/containers';
+@import 'widgets/menus';
+@import 'widgets/windows';
+@import 'widgets/apps';

@@ -1,0 +1,30 @@
+{
+  "menu-icon": {
+    "type": "iconfilechooser",
+    "default": "nalamint-launchpad",
+    "description": "Icon"
+  },
+  "overlay-key": {
+    "type": "keybinding",
+    "default": "Super_L::Super_R",
+    "description": "Keyboard shortcut to open and close"
+  },
+  "blur-radius": {
+    "type": "spinbutton",
+    "default": 64,
+    "min": 0,
+    "max": 120,
+    "step": 4,
+    "units": "px",
+    "description": "Background blur (0 = no blur)"
+  },
+  "hide-settings-pages": {
+    "type": "switch",
+    "default": true,
+    "description": "Leave System Settings pages out of the grid (search still finds them)"
+  },
+  "layout": {
+    "type": "generic",
+    "default": {}
+  }
+}

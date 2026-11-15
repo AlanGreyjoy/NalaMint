@@ -1,0 +1,256 @@
+// Notebooks, panes, frames, toolbars, bars, dialogs, misc containers.
+
+separator {
+  min-width: 1px;
+  min-height: 1px;
+  background-color: $border;
+  &.spacer { background: none; }
+}
+
+frame > border, .frame {
+  margin: 0;
+  padding: 0;
+  border: 1px solid $border;
+  border-radius: 0;
+  box-shadow: none;
+}
+frame.flat > border, .frame.flat { border-style: none; }
+
+expander {
+  title > arrow {
+    min-width: 16px;
+    min-height: 16px;
+    color: $fg_dim;
+    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+    &:hover { color: $fg; }
+    &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  }
+}
+
+// Panes: a 1px line with a wider invisible grab area
+paned {
+  > separator {
+    min-width: 1px;
+    min-height: 1px;
+    -gtk-icon-source: none;
+    border-style: none;
+    background-color: transparent;
+    background-image: image($border);
+    background-size: 1px 1px;
+    &:selected { background-image: image($accent); }
+    &.wide {
+      min-width: 6px;
+      min-height: 6px;
+      background-color: $bg;
+      background-image: image($border), image($border);
+      background-size: 1px 1px, 1px 1px;
+    }
+  }
+  &.horizontal > separator {
+    background-repeat: repeat-y;
+    &:dir(ltr) { margin: 0 -6px 0 0; padding: 0 6px 0 0; background-position: left; }
+    &:dir(rtl) { margin: 0 0 0 -6px; padding: 0 0 0 6px; background-position: right; }
+    &.wide { margin: 0; padding: 0; background-repeat: repeat-y, repeat-y; background-position: left, right; }
+  }
+  &.vertical > separator {
+    margin: 0 0 -6px 0;
+    padding: 0 0 6px 0;
+    background-repeat: repeat-x;
+    background-position: top;
+    &.wide { margin: 0; padding: 0; background-repeat: repeat-x, repeat-x; background-position: bottom, top; }
+  }
+}
+
+// Notebooks: tabs as rounded pills on a grey strip (Terminal / Safari style)
+notebook {
+  > header {
+    padding: 4px;
+    border: none;
+    background-color: $headerbar;
+    &.top { border-bottom: 1px solid $border; }
+    &.bottom { border-top: 1px solid $border; }
+    &.left { border-right: 1px solid $border; }
+    &.right { border-left: 1px solid $border; }
+
+    > tabs > arrow {
+      min-width: 16px;
+      min-height: 16px;
+      padding: 2px;
+      border-radius: $radius_item;
+      color: $fg_dim;
+      &:hover { color: $fg; background-color: $hover; }
+      &.down { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+      &.up { -gtk-icon-source: -gtk-icontheme('pan-up-symbolic'); }
+    }
+
+    tab {
+      min-height: 22px;
+      min-width: 24px;
+      padding: 1px 12px;
+      margin: 0 2px;
+      border: none;
+      border-radius: $radius_button;
+      color: $fg_dim;
+      font-weight: normal;
+      outline-offset: -4px;
+      &:hover { color: $fg; background-color: $hover; }
+      &:checked {
+        color: $fg;
+        background-color: if($is_dark, $button, $base);
+        box-shadow: $button_shadow, 0 0 0 1px $button_border;
+      }
+      &:disabled { color: $disabled_fg; }
+      &:drop(active) { box-shadow: inset 0 0 0 2px $accent; }
+      button.flat {
+        min-width: 16px;
+        min-height: 16px;
+        padding: 0;
+        margin: 0 -6px 0 4px;
+        border-radius: 9999px;
+        color: $fg_dim;
+        &:hover { color: $fg; background-color: $pressed; }
+      }
+      label { padding: 0 2px; }
+    }
+    &.left tab, &.right tab { margin: 2px 0; }
+  }
+  > stack:not(:only-child) { background-color: $base; }
+  &.frame { border: 1px solid $border; }
+}
+
+// Toolbars, action bars, search bars, status bars
+toolbar {
+  padding: 4px 6px;
+  background-color: $bg;
+  -GtkWidget-window-dragging: true;
+  separator { margin: 4px; background: none; }
+  &.horizontal > separator { min-width: 1px; background-color: $border; margin: 6px 4px; }
+  &.vertical > separator { min-height: 1px; background-color: $border; margin: 4px 6px; }
+  button { @extend %flat-button; }
+  &.osd {
+    padding: 8px;
+    border-radius: 12px;
+    border: none;
+    background-color: $osd_bg;
+    box-shadow: none;
+  }
+  &.inline-toolbar {
+    padding: 3px;
+    border: 1px solid $border;
+    border-top: none;
+    background-color: $bg;
+  }
+}
+
+// Nemo / Xed / Xreader main toolbars blend into the title bar
+.primary-toolbar, toolbar.primary-toolbar {
+  background-color: $headerbar;
+  border-bottom: 1px solid $border;
+  padding: 4px 8px;
+}
+
+actionbar > revealer > box {
+  padding: 6px;
+  border-top: 1px solid $border;
+  background-color: $headerbar;
+}
+
+searchbar, .search-bar {
+  > revealer > box {
+    padding: 6px;
+    border-bottom: 1px solid $border;
+    background-color: $headerbar;
+  }
+}
+
+statusbar {
+  padding: 2px 8px;
+  color: $fg_dim;
+  frame > border, frame { border: none; }
+}
+
+// Info bars: soft tinted banners
+infobar {
+  border: none;
+  text-shadow: none;
+  &.info, &.info > revealer > box { background-color: $info_bg; }
+  &.question, &.question > revealer > box { background-color: $info_bg; }
+  &.warning, &.warning > revealer > box { background-color: $warning_bg; }
+  &.error, &.error > revealer > box { background-color: $error_bg; }
+  &.success, &.success > revealer > box { background-color: $success_bg; }
+  > revealer > box { padding: 8px; }
+  label { color: $fg; }
+  border-bottom: 1px solid $border;
+}
+
+// Calendars
+calendar {
+  padding: 2px;
+  border: 1px solid $border;
+  border-radius: $radius_button;
+  color: $fg;
+  background-color: $base;
+  &:selected { color: $accent_fg; background-color: $accent; border-radius: 4px; }
+  &.header { border: none; border-bottom: 1px solid $border; border-radius: 0; }
+  &.button { color: $fg_dim; background: none; border: none; box-shadow: none; &:hover { color: $fg; } }
+  &.highlight { color: $accent; font-weight: bold; }
+  &:indeterminate { color: $disabled_fg; }
+}
+
+// Dialogs
+dialog .dialog-action-box { margin: 12px; }
+dialog .dialog-action-area button { min-width: 72px; }
+messagedialog {
+  .titlebar { min-height: 20px; border: none; background-color: transparent; box-shadow: none; }
+  // Alerts have no window buttons on macOS; GTK3 can't remove them, so make
+  // them invisible and zero-sized.
+  .titlebar button.titlebutton {
+    min-width: 0; min-height: 0; margin: 0; padding: 0;
+    background-image: none; opacity: 0;
+  }
+  box.vertical > label.title { font-weight: bold; }
+  .dialog-action-area { margin: 0 16px 16px; }
+  .dialog-action-area button { padding: 4px 16px; }
+  &.csd.background { border-radius: $radius_window; }
+}
+
+// File chooser
+filechooser {
+  .dialog-action-box { border-top: 1px solid $border; }
+  #pathbarbox { padding: 6px; border-bottom: 1px solid $border; background-color: $headerbar; }
+  .search-bar { background-color: $headerbar; }
+  stack.view { background-color: $base; }
+  placessidebar.sidebar { border-right: 1px solid $border; }
+}
+filechooserbutton:drop(active) { box-shadow: none; }
+
+.path-bar button {
+  @extend %flat-button;
+  padding: 2px 8px;
+  &.slider-button { padding: 2px 4px; }
+  &:checked { font-weight: bold; background-color: transparent; }
+}
+
+// Color chooser
+colorswatch {
+  &.top { border-top-left-radius: 6px; border-top-right-radius: 6px; }
+  &.bottom { border-bottom-left-radius: 6px; border-bottom-right-radius: 6px; }
+  &.left, &:first-child:not(.top) { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+  &.right, &:last-child:not(.bottom) { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+  &:only-child { border-radius: 6px; }
+  overlay { border-radius: inherit; box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.1); }
+  &:selected overlay { box-shadow: inset 0 0 0 2px $base, 0 0 0 2px $accent; }
+  &#add-color-button { border-radius: 6px; background-color: $trough; color: $fg; }
+}
+colorchooser .popover.osd { border-radius: 10px; }
+
+// Level/scale popups, OSD overlays on video etc.
+.osd.frame, .app-notification, .app-notification.frame {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  color: #ffffff;
+  background-color: $osd_bg;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}

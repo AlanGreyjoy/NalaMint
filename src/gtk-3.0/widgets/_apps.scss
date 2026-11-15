@@ -1,0 +1,102 @@
+// App-specific fixes: Nemo, Xed, Xreader, terminals, Cinnamon settings.
+
+// ----- Nemo -----
+.nemo-window {
+  .sidebar, .nemo-places-sidebar, .places-treeview {
+    color: $fg;
+    background-color: $sidebar;
+  }
+  .nemo-places-sidebar.frame, .sidebar .frame { border: none; }
+  .places-treeview {
+    -NemoPlacesTreeView-disk-full-bg-color: $trough;
+    -NemoPlacesTreeView-disk-full-fg-color: $accent;
+    -NemoPlacesTreeView-disk-full-bar-width: 2;
+    -NemoPlacesTreeView-disk-full-bar-radius: 1;
+    -NemoPlacesTreeView-disk-full-bottom-padding: 1;
+    -NemoPlacesTreeView-disk-full-max-length: 70;
+    -GtkTreeView-vertical-separator: 6;
+    .view, &.view { background-color: $sidebar; }
+    .view.cell:hover, &.view.cell:hover { background-color: $hover; }
+    .view.cell:selected, &.view:selected {
+      color: $fg;
+      background-color: $sidebar_selected;
+    }
+    .view.expander, &.view.expander { color: $fg_faint; }
+  }
+  .sidebar .view, .sidebar row { background-color: $sidebar; }
+  .sidebar .view.cell:selected, .sidebar row:selected {
+    color: $fg;
+    background-color: $sidebar_selected;
+  }
+  .sidebar .view:backdrop:selected { background-color: $pressed; }
+
+  .nemo-window-pane widget.entry {
+    border: 1px solid $accent;
+    border-radius: 4px;
+    color: $fg;
+    background-color: $base;
+    box-shadow: 0 0 0 3px $focus_glow;
+  }
+  .nemo-inactive-pane .view, .nemo-inactive-pane iconview { background-color: $view_alt; }
+
+  grid > paned > separator { background-image: image($border); }
+
+  // toolbar: flat icon buttons, linked nav buttons
+  toolbar.primary-toolbar button, .primary-toolbar button { @extend %flat-button; padding: 2px 6px; }
+  .primary-toolbar .linked > button { border-radius: $radius_button; }
+  .primary-toolbar entry { min-height: 24px; }
+
+  statusbar { border-top: 1px solid $border; background-color: $headerbar; }
+  notebook > header { background-color: $headerbar; }
+}
+
+// Desktop icons
+.nemo-desktop.nemo-canvas-item {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  &:active { color: $fg; }
+  &:selected {
+    color: #ffffff;
+    background-color: rgba($accent, 0.85);
+    border-radius: $radius_item;
+    text-shadow: none;
+  }
+}
+.nemo-desktop .view:selected { border-radius: $radius_item; }
+
+// ----- Xed -----
+.xed-window {
+  .xed-panel.side notebook tab.top { padding: 1px 8px; }
+  .xed-panel.bottom notebook.frame { border-style: none; }
+  .small-button { padding: 2px; min-height: 18px; min-width: 18px; }
+  .xed-searchbar { padding: 6px; border-top: 1px solid $border; background-color: $headerbar; }
+  .xed-goto-line-box {
+    padding: 6px;
+    border: 1px solid $border;
+    border-top: none;
+    border-radius: 0 0 $radius_button $radius_button;
+    background-color: $popover;
+  }
+  statusbar { border-top: 1px solid $border; background-color: $headerbar; }
+  statusbar button { @extend %flat-button; padding: 0 6px; }
+  statusbar widget frame, statusbar widget frame border { border: none; }
+}
+
+// ----- Xreader -----
+.xreader-window .primary-toolbar .button.the-button-in-the-combobox { padding: 2px 6px; }
+
+// ----- Terminals -----
+vte-terminal.terminal-screen {
+  -TerminalScreen-background-darkness: 1.0;
+  background-color: if($is_dark, #1c1c1e, #ffffff);
+  color: $fg;
+}
+terminal-window notebook > header { background-color: $headerbar; }
+
+// ----- XApp widgets (Cinnamon settings, Mint tools) -----
+.xapp-favorites-chooser, .xapp-icon-chooser-dialog .sidebar { background-color: $sidebar; }
+.cs-category-view iconview, .cs-category-view .view { background-color: transparent; }
+.cs-category-view iconview:hover { background-color: $hover; border-radius: $radius_button; }
+
+// Mint tools often use `.mintinstall` category tiles and grid buttons
+.mintinstall-category-button { border-radius: $radius_button; }

@@ -1,0 +1,99 @@
+// Menu bars, drop-down menus, popovers, tooltips.
+
+menubar, .menubar {
+  padding: 0 4px;
+  background-color: $headerbar;
+  border-bottom: 1px solid $border;
+  -GtkWidget-window-dragging: true;
+  > menuitem {
+    min-height: 18px;
+    padding: 3px 9px;
+    margin: 2px 0;
+    border-radius: $radius_item;
+    &:hover { color: $accent_fg; background-color: $accent; }
+    &:disabled { color: $disabled_fg; }
+  }
+}
+
+// Menu windows get the rounded shadowed frame from `.csd.popup decoration`
+menu, .menu, .context-menu {
+  margin: 0;
+  padding: 5px;
+  border: none;
+  border-radius: $radius_menu;
+  background-color: $popover;
+  color: $fg;
+
+  menuitem {
+    min-height: 18px;
+    min-width: 40px;
+    padding: 3px 10px;
+    border-radius: $radius_item;
+    text-shadow: none;
+    &:hover {
+      color: $accent_fg;
+      background-color: $accent;
+      accelerator { color: rgba($accent_fg, 0.75); }
+      arrow { color: $accent_fg; }
+    }
+    &:disabled { color: $disabled_fg; }
+    accelerator { color: $fg_faint; }
+    arrow {
+      min-width: 16px;
+      min-height: 16px;
+      color: $fg_dim;
+      &:dir(ltr) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); margin-left: 10px; }
+      &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); margin-right: 10px; }
+    }
+    label:dir(ltr) { margin-right: 8px; }
+  }
+
+  > arrow {
+    min-width: 16px;
+    min-height: 16px;
+    padding: 4px;
+    border: none;
+    border-radius: $radius_item;
+    background-color: $popover;
+    color: $fg_dim;
+    &.top { -gtk-icon-source: -gtk-icontheme('pan-up-symbolic'); }
+    &.bottom { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+    &:hover { background-color: $hover; color: $fg; }
+    &:disabled { color: transparent; background-color: transparent; }
+  }
+
+  separator { margin: 4px 8px; min-height: 1px; background-color: $border; }
+}
+
+// Popovers
+popover.background {
+  padding: 6px;
+  border: 1px solid $popover_border;
+  border-radius: $radius_menu;
+  background-color: $popover;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, if($is_dark, 0.45, 0.16));
+  > list, > .view, > toolbar { border-style: none; background-color: transparent; }
+  &.touch-selection, &.magnifier { border-radius: 8px; }
+  separator { margin: 4px 6px; }
+  list row { border-radius: $radius_item; }
+  &.menu { padding: 5px; }
+  .linked > button { box-shadow: none; }
+  label.title { font-weight: bold; }
+}
+popover.background.osd { background-color: $osd_bg; border-color: transparent; }
+
+// Tooltips
+tooltip {
+  padding: 4px 8px;
+  border-radius: 6px;
+  box-shadow: none;
+  text-shadow: none;
+  &.background {
+    color: $fg;
+    background-color: $popover;
+    background-clip: padding-box;
+    border: 1px solid $popover_border;
+  }
+  decoration { background-color: transparent; }
+  * { padding: 0; background-color: transparent; color: inherit; }
+}

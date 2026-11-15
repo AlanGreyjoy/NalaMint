@@ -1,0 +1,29 @@
+{
+  "radius": {
+    "type": "spinbutton",
+    "default": 12,
+    "min": 0,
+    "max": 24,
+    "step": 1,
+    "units": "px",
+    "description": "Corner radius",
+    "tooltip": "Match the window theme's title-bar radius (NalaMint uses 12 px)."
+  },
+  "shadow-focused": {
+    "type": "scale",
+    "default": 0.26,
+    "min": 0.0,
+    "max": 0.6,
+    "step": 0.02,
+    "description": "Corner shadow strength (active window)",
+    "tooltip": "Fills the clipped corners of Muffin-framed windows so their shadow stays continuous."
+  },
+  "shadow-unfocused": {
+    "type": "scale",
+    "default": 0.16,
+    "min": 0.0,
+    "max": 0.6,
+    "step": 0.02,
+    "description": "Corner shadow strength (inactive windows)"
+  }
+}
