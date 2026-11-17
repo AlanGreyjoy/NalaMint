@@ -1,9 +1,18 @@
 # App icon provenance
 
-Generated with the Codex CLI image tool (`~/.claude/skills/codex-image-gen`),
-not drawn by hand. `tools/slice_sheet.py` cuts the sheet into the 512 px icons
-here; `build.py` scales them to 16–256 px and maps them to icon names
-(`ICONS`).
+Generated with Codex image tools, not drawn by hand. Earlier sheets used the
+Codex CLI image tool (`~/.claude/skills/codex-image-gen`); individual entries
+below identify the tool and source. `tools/slice_sheet.py` cuts sheets into
+512 px icons; standalone generated PNGs can retain their original size.
+`build.py` scales the icon theme assets to 16–256 px and maps them to icon names (`ICONS`).
+
+## nalamint-dictation.png
+
+- Tool: Codex built-in image generation, transparent background.
+- Source: `~/.codex/generated_images/01a1eb6c-b699-7d61-bcd7-8ee82328a402/exec-51cb98c7-26ac-4f82-9067-c858c82676e0.png`.
+- Style reference: `terminal.png`. Resized from 1254×1254 to 512×512 with alpha intact.
+
+> Generate one original NalaMint Linux desktop app icon for NalaMint Dictation. Input image is a style reference only for the squircle geometry, bevel and lighting, never repeat its terminal symbol. Isolated single centered rounded-square tile, same approximately 91% canvas footprint and even transparent padding, slight top edge highlight and restrained depth. Deep evergreen-to-dark-teal tile. Center one bold pale mint microphone capsule with a clean U-shaped cradle and short stem. Flank it with a single short pair of vertical audio marks on each side, subordinate to the microphone, crisp enough to read at 24px. Straight-on perspective, balanced, simple, NalaMint app icon family. Real transparent alpha outside tile. No lettering, border frame, scene, logo, branding, watermark, or additional icons.
 
 ## app-icons-sheet-v1.png → settings, software, update, terminal, text-editor, calculator, system-monitor, files
 

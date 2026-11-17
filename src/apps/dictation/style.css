@@ -1,0 +1,40 @@
+.dictation-title {
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+.dictation-heading {
+  font-weight: bold;
+}
+
+.dictation-card {
+  background-color: @theme_base_color;
+  border: 1px solid alpha(@theme_fg_color, 0.16);
+  border-radius: 10px;
+}
+
+.dictation-key {
+  background-color: @theme_bg_color;
+  border: 1px solid alpha(@theme_fg_color, 0.18);
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 5px 9px;
+}
+
+window#dictation-indicator {
+  background-color: transparent;
+  background-image: none;
+}
+
+.dictation-indicator-content {
+  background-color: @theme_bg_color;
+  color: @theme_fg_color;
+  border: 1px solid alpha(@theme_fg_color, 0.22);
+  border-radius: 16px;
+  padding: 8px 14px;
+  font-weight: bold;
+}
+
+.dictation-indicator-content drawingarea {
+  color: @theme_selected_bg_color;
+}

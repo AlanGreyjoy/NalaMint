@@ -72,6 +72,44 @@ and enables both extensions. Their settings (corner radius and shadow, blur
 strength, the brightness that switches panel text dark) are in System Settings →
 Extensions.
 
+## NalaMint Dictation
+
+An optional GTK companion app for Cinnamon on X11. It follows the active
+NalaMint light or dark theme and appears in the application menu and Launchpad
+after a user-local install.
+
+Open **NalaMint Dictation**, click **Enable Dictation**, and focus a text field.
+Hold **Ctrl+Alt+V** while speaking. Release V to transcribe or press
+**Esc** while holding the shortcut to cancel. The recording indicator shows
+the microphone level without taking focus. Closing the settings window keeps
+the shortcut available. Open the app again or use its panel icon to quit.
+
+This prototype uses Whisper on the device with an English model. It records from
+the system’s default input and keeps the audio and latest transcript in memory.
+Auto-paste uses Ctrl+V and replaces the clipboard with the transcript. If a
+different window has focus when the transcript is ready, or Auto-paste is off,
+open the app to copy the last transcript. Recordings are capped at one minute.
+
+### Install the companion app
+
+The app uses the system Python 3, GTK 3 and XApp bindings, `python3-gi-cairo`,
+`python3-xlib` and `pulseaudio-utils`. Use `whisper-cli` from
+[whisper.cpp v1.9.5](https://github.com/ggml-org/whisper.cpp/releases/tag/v1.9.5)
+or a compatible build, and download the
+[quantized English model](https://huggingface.co/ggerganov/whisper.cpp/blob/main/ggml-base.en-q5_1.bin).
+If building from source, use `-DBUILD_SHARED_LIBS=OFF` to make the executable
+usable outside the build directory.
+
+```bash
+/usr/bin/python3 tools/install_dictation.py \
+  --engine /path/to/whisper-cli \
+  --model /path/to/ggml-base.en-q5_1.bin
+```
+
+The installer places the app, speech engine and model in
+`$XDG_DATA_HOME/nalamint/dictation` and adds a desktop launcher. If
+`XDG_DATA_HOME` is unset, it uses `~/.local/share`.
+
 ## GTK4 and libadwaita apps
 
 Mint's libadwaita (1.5, patched) reads `<theme>/libadwaita-1.5/base.css` and
