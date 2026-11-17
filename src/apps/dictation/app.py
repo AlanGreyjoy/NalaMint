@@ -133,11 +133,52 @@ class Dictation(Gtk.Application):
         Gtk.StyleContext.add_provider_for_screen(Gdk.Screen.get_default(), styles,
                                                   Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
         self.indicator = Indicator()
+        self.setup_problem = self.check_setup()
+        self.build_panel_menu()
+        self.hold()
 
     def do_activate(self):
         if self.window is None:
             self.build_window()
         self.window.present()
+
+    def build_panel_menu(self):
+        menu = Gtk.Menu()
+        heading = Gtk.MenuItem(sensitive=False)
+        heading.get_style_context().add_class("dictation-panel-heading")
+        summary = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=3, margin_top=3, margin_bottom=3)
+        self.panel_state = label("", "dictation-heading")
+        self.panel_detail = label("")
+        self.panel_detail.set_max_width_chars(36)
+        summary.add(self.panel_state)
+        summary.add(self.panel_detail)
+        heading.add(summary)
+        menu.append(heading)
+        menu.append(Gtk.SeparatorMenuItem())
+
+        self.panel_toggle = Gtk.MenuItem()
+        self.panel_toggle.connect("activate", self.toggle_enabled)
+        menu.append(self.panel_toggle)
+        self.panel_auto_paste = Gtk.CheckMenuItem(label="Auto-paste", active=self.auto_paste)
+        self.panel_auto_paste.connect("toggled", lambda item: self.set_auto_paste(item.get_active()))
+        menu.append(self.panel_auto_paste)
+        self.panel_copy = Gtk.MenuItem(label="Copy Last Transcript")
+        self.panel_copy.connect("activate", self.copy_transcript)
+        menu.append(self.panel_copy)
+        menu.append(Gtk.SeparatorMenuItem())
+        for title, action in (("Open Dictation", self.activate), ("Quit Dictation", self.quit)):
+            item = Gtk.MenuItem(label=title)
+            item.connect("activate", lambda _, fn=action: fn())
+            menu.append(item)
+
+        self.panel_icon = XApp.StatusIcon.new_with_name(APP_ID)
+        self.panel_icon.set_icon_name(self.icon)
+        self.panel_icon.set_primary_menu(menu)
+        self.panel_icon.set_secondary_menu(menu)
+        self.refresh_enable_controls()
+        self.refresh_transcript()
+        self.set_status(self.status)
+        menu.show_all()
 
     def build_window(self):
         window = Gtk.ApplicationWindow(application=self, title=NAME, default_width=476)
@@ -174,13 +215,12 @@ class Dictation(Gtk.Application):
         settings.add(Gtk.Separator())
 
         row = self.settings_row(settings, "Auto-paste", "Uses the clipboard to insert the transcript")
-        toggle = Gtk.Switch(active=self.auto_paste, valign=Gtk.Align.CENTER)
-        toggle.get_accessible().set_name("Auto-paste")
-        toggle.connect("notify::active", lambda widget, _: setattr(self, "auto_paste", widget.get_active()))
-        row.pack_end(toggle, False, False, 0)
+        self.auto_paste_switch = Gtk.Switch(active=self.auto_paste, valign=Gtk.Align.CENTER)
+        self.auto_paste_switch.get_accessible().set_name("Auto-paste")
+        self.auto_paste_switch.connect("notify::active", lambda widget, _: self.set_auto_paste(widget.get_active()))
+        row.pack_end(self.auto_paste_switch, False, False, 0)
         settings.add(Gtk.Separator())
 
-        self.setup_problem = self.check_setup()
         self.settings_row(settings, "On-device transcription", self.setup_problem or "Whisper · English")
 
         row = Gtk.Box(spacing=10)
@@ -190,7 +230,7 @@ class Dictation(Gtk.Application):
         self.enable_button.connect("clicked", self.toggle_enabled)
         row.pack_end(self.enable_button, False, False, 0)
         body.add(row)
-        self.refresh_enable_button()
+        self.refresh_enable_controls()
 
         transcript = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         heading = Gtk.Box(spacing=6)
@@ -232,17 +272,27 @@ class Dictation(Gtk.Application):
             return "Set up whisper-cli and the English model first. See the NalaMint README."
         return None
 
-    def refresh_enable_button(self):
-        if not self.window:
+    def refresh_enable_controls(self):
+        title = "Disable Dictation" if self.desktop else "Enable Dictation"
+        available = self.setup_problem is None
+        self.panel_toggle.set_label(title)
+        self.panel_toggle.set_sensitive(available)
+        if self.window:
+            self.enable_button.set_label(title)
+            self.enable_button.set_sensitive(available)
+            button_style = self.enable_button.get_style_context()
+            if self.desktop:
+                button_style.remove_class("suggested-action")
+            else:
+                button_style.add_class("suggested-action")
+
+    def set_auto_paste(self, enabled):
+        if self.auto_paste == enabled:
             return
-        button_style = self.enable_button.get_style_context()
-        if self.desktop:
-            self.enable_button.set_label("Disable Dictation")
-            button_style.remove_class("suggested-action")
-        else:
-            self.enable_button.set_label("Enable Dictation")
-            button_style.add_class("suggested-action")
-        self.enable_button.set_sensitive(self.setup_problem is None)
+        self.auto_paste = enabled
+        self.panel_auto_paste.set_active(enabled)
+        if self.window:
+            self.auto_paste_switch.set_active(enabled)
 
     def toggle_enabled(self, _button):
         if self.desktop:
@@ -253,19 +303,7 @@ class Dictation(Gtk.Application):
         except (RuntimeError, error.DisplayError) as exc:
             self.set_status(str(exc))
             return
-        self.hold()
-        self.panel_icon = XApp.StatusIcon.new_with_name(APP_ID)
-        self.panel_icon.set_icon_name(self.icon)
-        self.panel_icon.set_tooltip_text(f"{NAME} · {SHORTCUT}")
-        menu = Gtk.Menu()
-        for title, action in (("Open Dictation", self.activate), ("Quit Dictation", self.quit)):
-            item = Gtk.MenuItem(label=title)
-            item.connect("activate", lambda _, fn=action: fn())
-            menu.append(item)
-        menu.show_all()
-        self.panel_icon.set_primary_menu(menu)
-        self.panel_icon.set_secondary_menu(menu)
-        self.refresh_enable_button()
+        self.refresh_enable_controls()
         self.set_status("Ready to dictate")
 
     def disable(self):
@@ -273,15 +311,21 @@ class Dictation(Gtk.Application):
         if self.desktop:
             self.desktop.close()
             self.desktop = None
-            self.panel_icon.set_visible(False)
-            self.panel_icon = None
-            self.release()
         self.indicator.dismiss()
-        self.refresh_enable_button()
+        self.refresh_enable_controls()
         self.set_status("Dictation is off")
 
     def set_status(self, message, overlay=False, transient=False):
         self.status = message
+        state = "Dictation enabled" if self.desktop else "Dictation disabled"
+        detail = self.setup_problem or message
+        if detail == "Dictation is off":
+            detail = f"{SHORTCUT} · On-device English"
+        elif detail == "Ready to dictate":
+            detail = f"Ready · {SHORTCUT}"
+        self.panel_state.set_text(state)
+        self.panel_detail.set_text(detail)
+        self.panel_icon.set_tooltip_text(f"{state}\n{detail}")
         if self.window:
             self.status_label.set_text(message)
         if overlay:
@@ -394,6 +438,7 @@ class Dictation(Gtk.Application):
         return GLib.SOURCE_REMOVE
 
     def refresh_transcript(self):
+        self.panel_copy.set_sensitive(bool(self.transcript))
         if self.window:
             self.preview.get_buffer().set_text(self.transcript or "Your latest dictation will appear here.")
             self.copy_button.set_sensitive(bool(self.transcript))
@@ -419,6 +464,8 @@ class Dictation(Gtk.Application):
 
     def do_shutdown(self):
         self.disable()
+        self.panel_icon.set_visible(False)
+        self.release()
         Gtk.Application.do_shutdown(self)
 
 

@@ -81,14 +81,16 @@ after a user-local install.
 Open **NalaMint Dictation**, click **Enable Dictation**, and focus a text field.
 Hold **Ctrl+Alt+V** while speaking. Release V to transcribe or press
 **Esc** while holding the shortcut to cancel. The recording indicator shows
-the microphone level without taking focus. Closing the settings window keeps
-the shortcut available. Open the app again or use its panel icon to quit.
+the microphone level without taking focus. The panel menu shows whether
+dictation is enabled and what it is doing. Use it to enable or disable
+dictation, toggle Auto-paste, or copy the last transcript. The icon stays in
+the panel after closing the settings window. Use **Quit Dictation** to exit.
 
 This prototype uses Whisper on the device with an English model. It records from
 the system’s default input and keeps the audio and latest transcript in memory.
 Auto-paste uses Ctrl+V and replaces the clipboard with the transcript. If a
 different window has focus when the transcript is ready, or Auto-paste is off,
-open the app to copy the last transcript. Recordings are capped at one minute.
+copy the last transcript from the panel menu. Recordings are capped at one minute.
 
 ### Install the companion app
 
